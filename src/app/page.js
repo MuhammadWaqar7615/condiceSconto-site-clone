@@ -1,12 +1,12 @@
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import Banner from "@/components/Banner";
-import MosaicGrid from "@/components/MosaicGrid";
-import SecondaryOffers from "@/components/SecondaryOffers";
-import PromoBanner from "@/components/PromoBanner";
-import CodeLists from "@/components/CodeLists";
-import Newsletter from "@/components/Newsletter";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/layout/Navbar";
+import HeroSection from "@/components/home/HeroSection";
+import Banner from "@/components/home/Banner";
+import MosaicGrid from "@/components/home/MosaicGrid";
+import SecondaryOffers from "@/components/home/SecondaryOffers";
+import PromoBanner from "@/components/home/PromoBanner";
+import CodeLists from "@/components/home/CodeLists";
+import Newsletter from "@/components/home/Newsletter";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   return (
