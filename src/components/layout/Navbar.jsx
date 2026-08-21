@@ -21,7 +21,7 @@ function Navbar() {
 
   return (
     <nav className="bg-white shadow-sm border-b border-[#eaeaea]">
-      <div className="max-w-[1040px] mx-auto px-4 sm:px-6">
+      <div className="max-w-[1200px] h-[100px] mx-auto pt-4 px-4 sm:px-6">
         <div className="flex justify-between items-center h-[70px]">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center h-full py-2">
@@ -29,7 +29,7 @@ function Navbar() {
               <img
                 src="/images/logo.png"
                 alt="CodiceSconto Logo"
-                className="h-[34px] w-auto object-contain hidden sm:block"
+                className="h-[40px] w-auto object-contain hidden sm:block"
               />
               {/* Mobile logo */}
               {/* TODO: Replace placeholder with original image */}

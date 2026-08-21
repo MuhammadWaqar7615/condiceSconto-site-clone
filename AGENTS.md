@@ -235,3 +235,31 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+# /negozi Page Logic & Behavior
+
+The `/negozi` page has a complex, multi-tiered filtering system that MUST be preserved:
+
+1. **Global Cashback Toggle (Sub-Navbar)**
+   - The right side of the purple sub-navbar acts as a toggle between "All Stores" and "Cashback Stores".
+   - Toggling this updates the entire dataset and dynamically changes the sub-navbar title and toggle button text.
+
+2. **Preview Mode vs. Single-Letter Mode**
+   - **Preview Mode (Default):** When no specific letter is selected, the page displays a vertical list of all alphabet sections. However, each section ONLY displays a preview (max 8 store badges). The section header right-side text (e.g., "Tutti i X negozi") acts as a clickable button to expand.
+   - **Single-Letter Mode:** Clicking a letter in the left sidebar OR clicking the "Tutti i X negozi" button in a section header isolates that letter. 
+     - All other alphabet sections are hidden.
+     - The selected section expands to show ALL of its badges without the preview limit.
+     - The sub-navbar title updates to reflect the filter (e.g., "Negozi cashback che iniziano per #").
+
+### /negozi Page Edge Cases (Bug Fixes)
+- **State Retention:** Toggling the global "All Stores" vs "Cashback Stores" filter MUST NOT reset the active alphabet filter (`selectedLetter`). The user should remain on the same letter they were viewing.
+- **Mock Data Padding:** Because the mock data array is small, clicking to "expand" to 27 shops visually failed because there were only 8 shops available for that letter. The code must dynamically duplicate/pad the available mock stores up to the hardcoded `countsAll` and `countsCashback` numbers to ensure the UI visually renders the exact number of cards expected.
+
+### Complete Reset Behavior
+- Clicking the main title on the left side of the purple sub-navbar must act as a complete reset for the page. It MUST reset both `isCashbackOnly` to `false` and `selectedLetter` to `null`, instantly returning the user to the absolute default "Preview Mode" with all alphabets and all stores visible.
+
+### Mock Data Padding & Dynamic Previews
+- **Dynamic Preview Limits:** When rendering the preview mode (list of all alphabets), the number of badges shown per letter depends on the global filter:
+  - If "All Shops" is active: max 8 badges per letter.
+  - If "Cashback Shops" is active: max 4 badges per letter.
+- **Universal Padding:** The available mock data for any given letter is often smaller than the hardcoded screenshot totals. The codebase must universally pad the array of stores (by looping existing items) up to the target `totalCountForLetter` BEFORE determining what to display. This guarantees that whether the user is in preview mode (sliced to 4 or 8) or expanded mode (showing all), the exact required visual number of cards will render on the screen.
