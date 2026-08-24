@@ -2,6 +2,8 @@ import connectMongo from "@/lib/mongodb";
 import Store from "@/models/Store";
 import NegoziClient from "./NegoziClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Tutti i negozi e codici sconto",
   description: "Cerca e trova i migliori codici sconto e offerte dei tuoi negozi preferiti.",
