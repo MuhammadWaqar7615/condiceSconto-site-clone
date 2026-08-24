@@ -213,9 +213,9 @@ function NegoziContent() {
                     {/* Stores Grid */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                       {displayedBadges.map((store, index) => (
-                        <Link
+                        <a
                           key={`${store.slug || store.name}-${index}`}
-                          href="#"
+                          href={`/store/${store.slug}`}
                           className="bg-white border border-transparent hover:border-gray-200 rounded-sm shadow-sm hover:shadow-md transition-shadow p-4 flex flex-col items-center justify-center h-[120px] group"
                         >
                           <div className="h-12 w-full relative flex items-center justify-center mb-3">
@@ -235,7 +235,7 @@ function NegoziContent() {
                           <span className="text-gray-500 text-[13px] text-center group-hover:text-[#835674] transition-colors line-clamp-1 w-full">
                             {store.name}
                           </span>
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   </div>
