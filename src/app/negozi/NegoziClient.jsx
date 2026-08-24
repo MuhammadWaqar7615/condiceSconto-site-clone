@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, Suspense, useEffect, useCallback } from "react";
-import { stores, alphabetLetters } from "@/data/stores/storesData";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-function NegoziContent() {
+// We define alphabetLetters locally now that we removed the static data file import
+const alphabetLetters = ["#", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
+function NegoziContent({ stores }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -38,21 +40,6 @@ function NegoziContent() {
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }, [searchParams, router, pathname]);
 
-  // Exact store counts from the screenshots
-  const countsAll = {
-    "#": 27, "A": 238, "B": 210, "C": 322, "D": 116, "E": 161, "F": 211, "G": 106,
-    "H": 100, "I": 121, "J": 23, "K": 23, "L": 157, "M": 217, "N": 98, "O": 63,
-    "P": 282, "Q": 10, "R": 99, "S": 248, "T": 114, "U": 41, "V": 121, "W": 45,
-    "X": 5, "Y": 20, "Z": 17
-  };
-
-  const countsCashback = {
-    "#": 6, "A": 87, "B": 81, "C": 113, "D": 39, "E": 60, "F": 82, "G": 34,
-    "H": 33, "I": 42, "J": 5, "K": 8, "L": 50, "M": 69, "N": 31, "O": 29,
-    "P": 82, "Q": 4, "R": 27, "S": 89, "T": 38, "U": 17, "V": 39, "W": 15,
-    "X": 1, "Y": 6, "Z": 6
-  };
-
   const alphabetLayout = [
     ["#", "A", "B", "C", "D", "E"],
     ["F", "G", "H", "I", "J", "K"],
@@ -67,9 +54,10 @@ function NegoziContent() {
     groupedStores[letter] = [];
   });
 
-  // For UI simulation, we just filter deterministically for cashback view so it visibly changes
-  const baseStores = isCashbackOnly ? stores.filter((s, i) => i % 3 === 0) : stores;
-  const storeCountTotal = isCashbackOnly ? 1191 : 3568;
+  // Filter based on cashback if needed. Since we don't have isCashback in the MongoDB schema yet,
+  // this would return empty if true. We leave the filter logic intact for future compatibility.
+  const baseStores = isCashbackOnly ? stores.filter(s => s.isCashback) : stores;
+  const storeCountTotal = baseStores.length;
 
   baseStores.forEach((store) => {
     const firstChar = store.name.charAt(0).toUpperCase();
@@ -164,26 +152,14 @@ function NegoziContent() {
                 const allLetterStores = groupedStores[letter];
                 if (!allLetterStores || allLetterStores.length === 0) return null;
 
-                // Use actual numbers from our manual mapping
-                const totalCountForLetter = isCashbackOnly
-                  ? (countsCashback[letter] || allLetterStores.length)
-                  : (countsAll[letter] || allLetterStores.length);
-
-                // Universally pad the array up to the hardcoded total count
-                let paddedBadges = [...allLetterStores];
-                while (paddedBadges.length < totalCountForLetter) {
-                  const storeToCopy = allLetterStores[paddedBadges.length % allLetterStores.length]
-                    || { name: `Store Placeholder ${paddedBadges.length}` };
-                  paddedBadges.push(storeToCopy);
-                }
-                paddedBadges = paddedBadges.slice(0, totalCountForLetter);
+                const totalCountForLetter = allLetterStores.length;
 
                 // Determine display array based on mode
-                let displayedBadges = paddedBadges;
+                let displayedBadges = allLetterStores;
                 if (!selectedLetter) {
                   // Preview mode limit: 4 for cashback, 8 for all
                   const previewLimit = isCashbackOnly ? 4 : 8;
-                  displayedBadges = paddedBadges.slice(0, previewLimit);
+                  displayedBadges = allLetterStores.slice(0, previewLimit);
                 }
 
                 return (
@@ -249,12 +225,12 @@ function NegoziContent() {
   );
 }
 
-export default function NegoziPage() {
+export default function NegoziClient({ stores }) {
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f2f5]">
       <Navbar />
       <Suspense fallback={<div className="p-8 text-center text-gray-500">Caricamento...</div>}>
-        <NegoziContent />
+        <NegoziContent stores={stores} />
       </Suspense>
       <Footer />
     </div>

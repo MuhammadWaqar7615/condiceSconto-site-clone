@@ -1,53 +1,18 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        const data = await response.json();
-        setError(data.error || "Login failed. Please try again.");
-      }
-    } catch (err) {
-      setError("An unexpected error occurred.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+export default function RegisterPage() {
   return (
     <div className="flex flex-col min-h-screen bg-[#eaedf2]">
       <Navbar />
 
       <main className="flex-grow flex items-center justify-center font-arial px-4 py-3">
-        {/* Login Card */}
+        {/* Register Card */}
         <div className="w-full max-w-[750px] bg-white rounded shadow-sm overflow-hidden">
-
+          
           {/* Card Content Padding */}
           <div className="px-10 py-12 sm:px-[60px]">
-
+            
             {/* Logo */}
             <div className="flex justify-center mb-6">
               {/* TODO: Replace placeholder with original image */}
@@ -60,7 +25,7 @@ export default function LoginPage() {
 
             {/* Title */}
             <h1 className="text-[26px] font-medium text-center text-[#4a4a4a] mb-8">
-              Entra su CodiceSconto
+              Registrati su CodiceSconto
             </h1>
 
             {/* Social Logins */}
@@ -71,7 +36,7 @@ export default function LoginPage() {
                     <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
                   </svg>
                 </div>
-                Accedi con Facebook
+                Registrati con Facebook
               </button>
 
               <button className="relative w-full flex items-center justify-center border border-[#e0e0e0] rounded py-3 hover:bg-gray-50 transition-colors text-[#555] font-normal text-[15px]">
@@ -80,7 +45,7 @@ export default function LoginPage() {
                     <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
                   </svg>
                 </div>
-                Accedi con Google
+                Registrati con Google
               </button>
             </div>
 
@@ -91,46 +56,59 @@ export default function LoginPage() {
               <div className="flex-grow border-t border-[#e8e8e8]"></div>
             </div>
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded">
-                {error}
-              </div>
-            )}
-
-            {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Registration Form */}
+            <form className="space-y-4">
               <div>
                 <input
                   type="email"
                   placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-[#825776]"
                   required
                 />
               </div>
-              <div>
+              <div className="relative">
                 <input
                   type="password"
                   placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-[#825776]"
+                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-[#825776] pr-12"
                   required
                 />
+                <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#555]">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                </button>
               </div>
 
-              <div className="pt-1 pb-3">
-                <a href="#" className="inline-flex items-center text-[13px] text-[#777] hover:text-[#555] transition-colors">
-                  <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  Password dimenticata?
-                </a>
+              {/* Checkboxes */}
+              <div className="pt-1 pb-1 space-y-3">
+                <label className="flex items-start cursor-pointer">
+                  <div className="mt-[2px] mr-2.5 relative flex items-center justify-center">
+                    <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded bg-white checked:bg-white checked:border-[#825776] focus:outline-none focus:ring-1 focus:ring-[#825776] cursor-pointer transition-colors" required />
+                    <svg className="absolute w-3 h-3 text-[#825776] opacity-0 peer-checked:opacity-100 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-[13px] text-[#777] leading-relaxed">
+                    Accetto <a href="#" className="font-bold text-[#555] hover:underline">condizioni</a> e <a href="#" className="font-bold text-[#555] hover:underline">privacy</a> di CodiceSconto
+                  </span>
+                </label>
+                <label className="flex items-start cursor-pointer">
+                  <div className="mt-[2px] mr-2.5 relative flex items-center justify-center">
+                    <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded bg-white checked:bg-white checked:border-[#825776] focus:outline-none focus:ring-1 focus:ring-[#825776] cursor-pointer transition-colors" />
+                    <svg className="absolute w-3 h-3 text-[#825776] opacity-0 peer-checked:opacity-100 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-[13px] text-[#777] leading-relaxed">
+                    Consento l'utilizzo dei miei dati per finalità di marketing
+                  </span>
+                </label>
               </div>
 
               {/* Bot Verification Mock */}
-              <div className="mb-6">
+              <div className="mb-6 mt-4">
                 <span className="block text-[14px] text-[#444] font-medium mb-1.5">Verifica bot</span>
                 <div className="border border-[#e4e4e4] rounded p-2 bg-white flex justify-between items-center h-[74px]">
                   <div className="flex items-center pl-2">
@@ -158,12 +136,9 @@ export default function LoginPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isLoading}
-                className={`w-full text-white font-medium py-3 rounded text-[16px] transition-colors mt-2 ${
-                  isLoading ? "bg-[#a6869c] cursor-not-allowed" : "bg-[#825776] hover:bg-[#724a67]"
-                }`}
+                className="w-full bg-[#825776] hover:bg-[#724a67] text-white font-medium py-3 rounded text-[16px] transition-colors mt-2"
               >
-                {isLoading ? "Accesso in corso..." : "Entra"}
+                Registrati
               </button>
             </form>
           </div>
@@ -171,7 +146,7 @@ export default function LoginPage() {
           {/* Registration Footer area attached to card */}
           <div className="bg-[#714f68] py-[16px] text-center">
             <p className="text-[15px] text-[#e0e0e0]">
-              Non hai un account? <a href="/account/registrati" className="text-white font-bold hover:underline ml-1">REGISTRATI</a>
+              Hai già un account? <a href="/account/login" className="text-white font-bold hover:underline ml-1">ENTRA</a>
             </p>
           </div>
         </div>
