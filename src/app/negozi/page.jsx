@@ -14,7 +14,7 @@ export default async function NegoziPage() {
   await connectMongo();
   
   // Find only active stores, select necessary fields, lean for plain objects
-  const rawStores = await Store.find({ isActive: true })
+  const rawStores = await Store.find({ isActive: { $ne: false } })
     .select("name slug logoPath")
     .sort({ name: 1 })
     .lean();
