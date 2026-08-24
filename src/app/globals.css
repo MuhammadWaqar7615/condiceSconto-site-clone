@@ -35,3 +35,13 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Ensure buttons and clickable elements always have a pointer cursor */
+button, 
+[role="button"],
+a,
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  cursor: pointer;
+}

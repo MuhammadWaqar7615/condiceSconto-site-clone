@@ -18,7 +18,7 @@ async function checkAdminAuth() {
 export async function GET(request, { params }) {
   try {
     await connectMongo();
-    const { id } = params;
+    const { id } = await params;
 
     const store = await Store.findById(id);
     if (!store) {
@@ -41,7 +41,7 @@ export async function PUT(request, { params }) {
     if (authError) return NextResponse.json({ message: authError.error }, { status: authError.status });
 
     await connectMongo();
-    const { id } = params;
+    const { id } = await params;
     const data = await request.json();
 
     // If slug is updated, verify it doesn't conflict
@@ -77,7 +77,7 @@ export async function DELETE(request, { params }) {
     if (authError) return NextResponse.json({ message: authError.error }, { status: authError.status });
 
     await connectMongo();
-    const { id } = params;
+    const { id } = await params;
 
     const deletedStore = await Store.findByIdAndDelete(id);
 

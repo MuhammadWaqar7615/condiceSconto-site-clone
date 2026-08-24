@@ -1,9 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import ClientDeleteButton from "./stores/ClientDeleteButton";
+import AddCouponModal from "./AddCouponModal";
 
 export default function StoreTable({ stores }) {
+  const [selectedStore, setSelectedStore] = useState(null);
+
+  const handleRowClick = (store) => {
+    setSelectedStore(store);
+  };
+
+  const closeModal = () => {
+    setSelectedStore(null);
+  };
+
   return (
     <div>
       <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -20,7 +32,11 @@ export default function StoreTable({ stores }) {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {stores.map((store) => (
-                <tr key={store._id}>
+                <tr 
+                  key={store._id} 
+                  onClick={() => handleRowClick(store)}
+                  className="cursor-pointer hover:bg-gray-50 transition-colors"
+                >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="h-10 w-10 flex items-center justify-center bg-gray-50 rounded p-1">
                       <img src={store.logoPath} alt={store.name} className="max-h-full max-w-full object-contain" />
@@ -37,7 +53,7 @@ export default function StoreTable({ stores }) {
                       {store.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" onClick={(e) => e.stopPropagation()}>
                     <Link href={`/dashboard/stores/${store._id}/edit`} className="text-indigo-600 hover:text-indigo-900 mr-4">
                       Edit
                     </Link>
@@ -56,6 +72,12 @@ export default function StoreTable({ stores }) {
           </table>
         </div>
       </div>
+      
+      <AddCouponModal 
+        isOpen={!!selectedStore} 
+        onClose={closeModal} 
+        store={selectedStore} 
+      />
     </div>
   );
 }

@@ -1,19 +1,17 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { stores } from "@/data/stores/storesData";
+import connectMongo from "@/lib/mongodb";
+import Store from "@/models/Store";
+import Coupon from "@/models/Coupon";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-
-
-export function generateStaticParams() {
-  return stores.map((store) => ({
-    slug: store.slug,
-  }));
-}
+import CouponCard from "./CouponCard";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const store = stores.find((s) => s.slug === slug);
+  const decodedSlug = decodeURIComponent(slug);
+  await connectMongo();
+  const store = await Store.findOne({ slug: decodedSlug }).lean();
   
   if (!store) {
     return {
@@ -29,80 +27,79 @@ export async function generateMetadata({ params }) {
 
 export default async function StorePage({ params }) {
   const { slug } = await params;
-  const store = stores.find((s) => s.slug === slug);
+  const decodedSlug = decodeURIComponent(slug);
+  
+  await connectMongo();
+  const store = await Store.findOne({ slug: decodedSlug, isActive: true }).lean();
 
   if (!store) {
     notFound();
   }
 
-  const storeProducts = [
-    {
-      type: "CODICE",
-      discount: "10%",
-      title: `Codice sconto ${store.name} 10% su tutto il catalogo`,
-      description: `Applica questo codice nel carrello per ottenere il 10% di sconto su tutti i prodotti ${store.name}. Offerta valida solo online.`,
-      expires: "Scade tra 3 giorni",
-      verified: true,
-    },
-    {
-      type: "OFFERTA",
-      discount: "50€",
-      title: `Sconto ${store.name} di 50€ sui nuovi arrivi`,
-      description: `Scopri la nuova collezione e risparmia 50€ sui tuoi acquisti superiori a 150€. Sconto applicato in automatico al checkout.`,
-      expires: "Scade il 31/12/2026",
-      verified: true,
-    },
-    {
-      type: "SPEDIZIONE",
-      discount: "GRATIS",
-      title: `Spedizione Gratuita su ${store.name}`,
-      description: `Ottieni la spedizione gratuita su tutti gli ordini effettuati oggi. Non è richiesto un acquisto minimo.`,
-      expires: "Fino a esaurimento scorte",
-      verified: true,
-    },
-    {
-      type: "SCONTO",
-      discount: "20%",
-      title: `Extra sconto del 20% nella sezione Outlet`,
-      description: `Non perdere l'occasione di risparmiare un ulteriore 20% sui prodotti già scontati nell'area outlet del sito.`,
-      expires: "Scade domani",
-      verified: false,
-    },
-    {
-      type: "REGALO",
-      discount: "OMAGGIO",
-      title: `Ricevi un omaggio esclusivo con il tuo ordine ${store.name}`,
-      description: `Effettua un ordine di almeno 50€ e riceverai un omaggio esclusivo a sorpresa all'interno del tuo pacco.`,
-      expires: "Senza scadenza",
-      verified: true,
-    }
-  ];
+  // Find active coupons for this store
+  // Optional: filter out expired ones (expiresAt > now or null)
+  const now = new Date();
+  const couponsRaw = await Coupon.find({
+    storeId: store._id,
+    isActive: true,
+    $or: [
+      { expiresAt: { $exists: false } },
+      { expiresAt: null },
+      { expiresAt: { $gt: now } }
+    ]
+  }).sort({ isFeatured: -1, createdAt: -1 }).lean();
+
+  // Serialize for Client Component
+  const coupons = couponsRaw.map(c => ({
+    _id: c._id.toString(),
+    type: c.type,
+    title: c.title,
+    description: c.description,
+    code: c.code,
+    couponUrl: c.couponUrl,
+    discount: c.discount,
+    terms: c.terms,
+    isFeatured: c.isFeatured,
+    expiresAt: c.expiresAt ? c.expiresAt.toISOString() : null,
+  }));
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f0f2f5]">
+    <div className="flex flex-col min-h-screen bg-[#f4f5f7]">
       <Navbar />
       
-      {/* Breadcrumb Area */}
-      <div className="bg-[#835674] w-full py-3">
+      {/* Hero Banner Section */}
+      <div className="bg-gradient-to-r from-[#7a4e6b] to-[#8d5e7d] w-full pt-4 pb-20 shadow-inner">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-          <div className="text-white/80 text-[13px] flex items-center gap-2 font-light">
+          {/* Breadcrumbs */}
+          <div className="text-white/80 text-[12px] flex items-center gap-2 font-medium tracking-wide mb-6">
             <a href="/" className="hover:text-white transition-colors">Home</a>
-            <span>&gt;</span>
+            <span>/</span>
             <a href="/negozi" className="hover:text-white transition-colors">Negozi</a>
-            <span>&gt;</span>
-            <span className="text-white font-medium">{store.name}</span>
+            <span>/</span>
+            <span className="text-white">{store.name}</span>
+          </div>
+          
+          <div className="md:ml-[280px]">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-sm">
+              Codici Sconto e Offerte {store.name}
+            </h1>
+            <p className="text-white/90 text-sm md:text-base font-light max-w-2xl">
+              Scopri tutte le offerte, i prodotti e i codici sconto attivi per acquistare su {store.name} al miglior prezzo. Tutte le promozioni sono verificate.
+            </p>
           </div>
         </div>
       </div>
 
-      <main className="flex-grow w-full max-w-[1200px] mx-auto px-4 py-8">
+      {/* Main Content Overlapping Banner */}
+      <main className="flex-grow w-full max-w-[1200px] mx-auto px-4 sm:px-6 pb-12 -mt-12">
         
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-8">
           
-          {/* Left Sidebar - Store Info */}
-          <div className="w-full md:w-[300px] shrink-0">
-            <div className="bg-white rounded-sm shadow-sm p-6 sticky top-6 border border-gray-100 flex flex-col items-center">
-              <div className="w-[180px] h-[100px] flex items-center justify-center p-2 mb-4">
+          {/* Left Sidebar - Store Logo & Info */}
+          <div className="w-full md:w-[250px] shrink-0">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 flex flex-col items-center sticky top-6">
+              
+              <div className="w-[160px] h-[160px] flex items-center justify-center p-4 mb-4 border border-gray-100 rounded-lg bg-white shadow-sm -mt-16">
                 <img 
                   src={store.logoPath} 
                   alt={`${store.name} logo`} 
@@ -110,66 +107,33 @@ export default async function StorePage({ params }) {
                   loading="lazy"
                 />
               </div>
-              <h1 className="text-xl font-bold text-gray-800 mb-2 text-center">{store.name}</h1>
-              <p className="text-[13px] text-gray-500 text-center mb-6 leading-relaxed">
-                Scopri tutte le offerte, i prodotti e i codici sconto attivi per acquistare su {store.name} al miglior prezzo.
-              </p>
               
-              <div className="w-full flex justify-between text-[13px] text-gray-500 border-t border-gray-100 pt-4">
-                <span>Offerte attive:</span>
-                <span className="font-bold text-[#835674] bg-[#f8f4f7] px-2 py-0.5 rounded-sm">{storeProducts.length}</span>
+              <h2 className="text-xl font-extrabold text-gray-800 mb-4 text-center">{store.name}</h2>
+              
+              <div className="w-full flex justify-between items-center text-sm text-gray-600 bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <span className="font-medium">Offerte attive</span>
+                <span className="font-bold text-white bg-[#835674] px-2.5 py-1 rounded-md text-xs">{coupons.length}</span>
               </div>
+              
             </div>
           </div>
 
           {/* Right Main Content - Products / Deals List */}
-          <div className="flex-1 flex flex-col space-y-5">
+          <div className="flex-1 flex flex-col space-y-6 pt-2 md:pt-14">
             
-            <h2 className="text-[22px] font-light text-gray-800 mb-2">
-              Codici Sconto e Offerte <strong className="font-bold text-[#835674]">{store.name}</strong>
-            </h2>
-
-            {storeProducts.map((product, index) => (
-              <div key={index} className="bg-white rounded-sm shadow-sm border border-transparent hover:border-gray-200 hover:shadow-md transition-all flex flex-col sm:flex-row overflow-hidden group">
-                
-                {/* Left Discount Badge */}
-                <div className="w-full sm:w-[140px] bg-[#f8f9fa] sm:border-r border-gray-100 flex flex-col items-center justify-center p-4 flex-shrink-0 group-hover:bg-[#f8f4f7] transition-colors">
-                  <span className="text-[11px] font-bold text-[#835674] uppercase tracking-wider mb-1">{product.type}</span>
-                  <span className="text-[26px] font-bold text-gray-800 leading-none text-center tracking-tight">{product.discount}</span>
-                </div>
-
-                {/* Middle Content */}
-                <div className="flex-1 p-5 flex flex-col justify-center">
-                  <h3 className="text-[16px] font-bold text-[#333] mb-2 hover:text-[#835674] cursor-pointer transition-colors leading-tight">
-                    {product.title}
-                  </h3>
-                  <p className="text-[13.5px] text-gray-600 mb-4 line-clamp-2 leading-relaxed">
-                    {product.description}
-                  </p>
-                  
-                  <div className="flex items-center text-[12px] text-gray-500 gap-4 mt-auto">
-                    {product.verified && (
-                      <span className="flex items-center gap-1.5 text-green-600 font-medium">
-                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                        Verificato
-                      </span>
-                    )}
-                    <span className="flex items-center gap-1.5">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                      {product.expires}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Right Action Button */}
-                <div className="w-full sm:w-[170px] p-5 flex items-center justify-center border-t sm:border-t-0 sm:border-l border-gray-100">
-                  <button className="w-full bg-[#835674] hover:bg-[#724F70] text-white text-[13px] font-bold py-[12px] px-2 rounded-sm transition-colors shadow-sm uppercase tracking-wider">
-                    Vedi l'offerta
-                  </button>
-                </div>
-
+            {coupons.length === 0 ? (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-10 text-center flex flex-col items-center justify-center">
+                <svg className="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p className="text-gray-600 text-lg font-medium">Nessuna offerta disponibile per {store.name}</p>
+                <p className="text-sm text-gray-400 mt-2">Torna a trovarci presto per nuovi codici sconto.</p>
               </div>
-            ))}
+            ) : (
+              <div className="flex flex-col space-y-4">
+                {coupons.map((coupon) => (
+                  <CouponCard key={coupon._id} coupon={coupon} />
+                ))}
+              </div>
+            )}
             
           </div>
         </div>
