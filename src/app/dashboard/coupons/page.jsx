@@ -46,7 +46,7 @@ export default async function CouponsPage() {
     <main className="min-h-screen bg-white">
       <div className="w-full">
           
-        <div className="px-4 md:px-8 py-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-purple-50">
+        <div className="px-4 md:px-8 py-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-accent-light">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">Manage Coupons</h1>
             <p className="text-sm text-gray-600 mt-1">Admin Dashboard / Coupons</p>
