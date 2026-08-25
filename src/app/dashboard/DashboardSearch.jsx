@@ -45,12 +45,12 @@ export default function DashboardSearch() {
           placeholder="Search stores by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#835674] focus:border-transparent outline-none w-full"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none w-full"
         />
         <div className="flex gap-2 w-full sm:w-auto">
           <button
             type="submit"
-            className="flex-1 sm:flex-none px-4 py-2 bg-[#835674] text-white rounded-lg text-sm font-medium hover:bg-[#6c4660] transition-colors"
+            className="flex-1 sm:flex-none px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
           >
             Search
           </button>
@@ -94,7 +94,7 @@ export default function DashboardSearch() {
           <div className="flex flex-wrap gap-1">
             <button
               onClick={() => updateParams("letter", "")}
-              className={`px-3 py-1 text-xs font-medium rounded border ${!currentLetter ? "bg-[#835674] text-white border-[#835674]" : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"}`}
+              className={`px-3 py-1 text-xs font-medium rounded border ${!currentLetter ? "bg-accent text-white border-accent" : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"}`}
             >
               All
             </button>
@@ -102,7 +102,7 @@ export default function DashboardSearch() {
               <button
                 key={letter}
                 onClick={() => updateParams("letter", letter)}
-                className={`px-3 py-1 text-xs font-medium rounded border ${currentLetter === letter ? "bg-[#835674] text-white border-[#835674]" : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"}`}
+                className={`px-3 py-1 text-xs font-medium rounded border ${currentLetter === letter ? "bg-accent text-white border-accent" : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"}`}
               >
                 {letter}
               </button>

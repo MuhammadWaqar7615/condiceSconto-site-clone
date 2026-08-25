@@ -91,7 +91,7 @@ export default function CouponTable({ coupons }) {
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${coupon.type === 'code' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${coupon.type === 'code' ? 'bg-accent-light text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
                       {coupon.type === 'code' ? 'Code' : 'Link'}
                     </span>
                   </td>
@@ -109,7 +109,7 @@ export default function CouponTable({ coupons }) {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button 
                       onClick={() => openEditModal(coupon)}
-                      className="text-[#835674] hover:text-[#6c4660] transition-colors"
+                      className="text-accent hover:text-accent-hover transition-colors"
                     >
                       Edit
                     </button>

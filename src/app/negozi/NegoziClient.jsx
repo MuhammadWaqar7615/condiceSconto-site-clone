@@ -88,7 +88,7 @@ function NegoziContent({ stores }) {
   return (
     <>
       {/* Sub-navbar */}
-      <div className="bg-[#835674] w-full py-4">
+      <div className="bg-primary-dark w-full py-4">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex justify-between items-center">
           <h1
             className="text-white text-2xl font-light cursor-pointer hover:underline"
@@ -116,10 +116,10 @@ function NegoziContent({ stores }) {
           <div className="w-full md:w-[300px] shrink-0">
             <div className="bg-white rounded-sm shadow-sm p-6 sticky top-6">
               <div
-                className="text-[17px] text-gray-700 font-light mb-4 pb-4 border-b border-gray-100 cursor-pointer hover:text-[#835674] transition-colors"
+                className="text-[17px] text-gray-700 font-light mb-4 pb-4 border-b border-gray-100 cursor-pointer hover:text-accent transition-colors"
                 onClick={() => updateParams({ letter: null })}
               >
-                Tutti i <strong className="text-[#835674] font-bold">{storeCountTotal}</strong> negozi
+                Tutti i <strong className="text-accent font-bold">{storeCountTotal}</strong> negozi
               </div>
               <div className="grid grid-cols-6 gap-y-3 gap-x-1 text-center text-[15px] font-medium text-gray-800">
                 {alphabetLayout.map((row, rowIndex) => (
@@ -128,7 +128,7 @@ function NegoziContent({ stores }) {
                       <button
                         key={letter}
                         onClick={() => updateParams({ letter })}
-                        className={`hover:text-[#835674] cursor-pointer hover:font-bold transition-colors block py-1 ${selectedLetter === letter ? 'text-[#835674] font-bold' : ''
+                        className={`hover:text-accent cursor-pointer hover:font-bold transition-colors block py-1 ${selectedLetter === letter ? 'text-accent font-bold' : ''
                           }`}
                       >
                         {letter}
@@ -166,21 +166,21 @@ function NegoziContent({ stores }) {
                   <div key={letter} id={`section-${letter === "#" ? "hash" : letter}`} className="scroll-mt-4">
                     {/* Section Header */}
                     <div className="flex items-center mb-3 shadow-sm rounded-sm overflow-hidden h-10">
-                      <div className="bg-[#835674] text-white w-12 h-full flex items-center justify-center font-bold text-sm">
+                      <div className="bg-primary-dark text-white w-12 h-full flex items-center justify-center font-bold text-sm">
                         {letter}
                       </div>
                       <div className="bg-white flex-1 h-full flex items-center justify-end px-4 text-xs font-light">
                         {/* If in preview mode, make this text a button that expands the section */}
                         {!selectedLetter ? (
                           <button
-                            className="text-gray-500 cursor-pointer hover:text-[#835674] transition-colors"
+                            className="text-gray-500 cursor-pointer hover:text-accent transition-colors"
                             onClick={() => updateParams({ letter })}
                           >
-                            Tutti i <strong className="text-[#835674] font-bold mx-1">{totalCountForLetter}</strong> {isCashbackOnly ? "negozi cashback" : "negozi"}
+                            Tutti i <strong className="text-accent font-bold mx-1">{totalCountForLetter}</strong> {isCashbackOnly ? "negozi cashback" : "negozi"}
                           </button>
                         ) : (
                           <span className="text-gray-500">
-                            Tutti i <strong className="text-[#835674] font-bold mx-1">{totalCountForLetter}</strong> {isCashbackOnly ? "negozi cashback" : "negozi"}
+                            Tutti i <strong className="text-accent font-bold mx-1">{totalCountForLetter}</strong> {isCashbackOnly ? "negozi cashback" : "negozi"}
                           </span>
                         )}
                       </div>
@@ -208,7 +208,7 @@ function NegoziContent({ stores }) {
                               </div>
                             )}
                           </div>
-                          <span className="text-gray-500 text-[13px] text-center group-hover:text-[#835674] transition-colors line-clamp-1 w-full">
+                          <span className="text-gray-500 text-[13px] text-center group-hover:text-accent transition-colors line-clamp-1 w-full">
                             {store.name}
                           </span>
                         </a>
@@ -227,7 +227,7 @@ function NegoziContent({ stores }) {
 
 export default function NegoziClient({ stores }) {
   return (
-    <div className="flex flex-col min-h-screen bg-[#f0f2f5]">
+    <div className="flex flex-col min-h-screen bg-main">
       <Navbar />
       <Suspense fallback={<div className="p-8 text-center text-gray-500">Caricamento...</div>}>
         <NegoziContent stores={stores} />

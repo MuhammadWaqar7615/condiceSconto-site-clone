@@ -172,7 +172,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                     name="couponType"
                     value={couponType}
                     onChange={(e) => setCouponType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900 bg-white"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900 bg-white"
                   >
                     <option value="code">Code Expose</option>
                     <option value="link">Embedded Link</option>
@@ -186,7 +186,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                     placeholder="e.g. 20% Off All Orders"
                   />
                 </div>
@@ -198,7 +198,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                     rows="2"
                     value={formData.description}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                     placeholder="Brief description of the deal..."
                   />
                 </div>
@@ -210,7 +210,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                     name="discountValue"
                     value={formData.discountValue}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                     placeholder="e.g. 20%, 15€, FREE SHIPPING"
                   />
                 </div>
@@ -223,7 +223,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                       name="code"
                       value={formData.code}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-[#835674] rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900 bg-pink-50/30"
+                      className="w-full px-3 py-2 border border-accent rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900 bg-pink-50/30"
                       placeholder="e.g. SAVE20"
                     />
                   </div>
@@ -250,7 +250,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                     rows="2"
                     value={formData.terms}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                     placeholder="Optional conditions..."
                   />
                 </div>
@@ -263,7 +263,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                       name="startsAt"
                       value={formData.startsAt}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                     />
                   </div>
                   <div className="flex-1">
@@ -273,7 +273,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                       name="expiresAt"
                       value={formData.expiresAt}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                     />
                   </div>
                 </div>
@@ -285,7 +285,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                       name="isActive"
                       checked={formData.isActive}
                       onChange={handleInputChange}
-                      className="w-4 h-4 text-[#835674] border-gray-300 rounded focus:ring-[#835674]"
+                      className="w-4 h-4 text-accent border-gray-300 rounded focus:ring-accent"
                     />
                     <span className="text-sm text-gray-700">Is Active</span>
                   </label>
@@ -296,7 +296,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                       name="isFeatured"
                       checked={formData.isFeatured}
                       onChange={handleInputChange}
-                      className="w-4 h-4 text-[#835674] border-gray-300 rounded focus:ring-[#835674]"
+                      className="w-4 h-4 text-accent border-gray-300 rounded focus:ring-accent"
                     />
                     <span className="text-sm text-gray-700">Featured (Pin to top)</span>
                   </label>
@@ -314,7 +314,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                 Cancel
               </button>
               <button
-                className="bg-[#835674] hover:bg-[#6c4660] text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 transition-all disabled:opacity-50"
+                className="bg-accent hover:bg-accent-hover text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 transition-all disabled:opacity-50"
                 type="button"
                 onClick={handleSubmit}
                 disabled={isLoading}

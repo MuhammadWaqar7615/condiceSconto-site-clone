@@ -28,8 +28,8 @@ const expiringCodes = [
 
 function CodeLists() {
   return (
-    <section className="bg-[#724F70] py-12">
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6">
+    <section className="py-12">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 bg-primary-dark rounded-2xl py-8">
 
         {/* Titles Row */}
         <div className="flex flex-col md:flex-row mb-5">
@@ -46,7 +46,7 @@ function CodeLists() {
         </div>
 
         {/* Light Grey Background Container */}
-        <div className="bg-[#f0f4f6] p-3 sm:p-4 rounded-md">
+        <div className="bg-section-light p-3 sm:p-4 rounded-md">
           <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
 
             {/* Left Column: Nuovi */}
@@ -58,11 +58,11 @@ function CodeLists() {
                     <img src={item.logo} alt="Store Logo" className="max-h-[35px] max-w-[85px] object-contain" />
                   </div>
 
-                  <div className="h-[55%] border-l border-dashed border-[#825a71] opacity-40"></div>
+                  <div className="h-[55%] border-l border-dashed border-accent opacity-40"></div>
 
                   <div className="flex-1 pl-4 pr-3 py-2 flex flex-col justify-center">
-                    <div className="text-[10px] font-bold text-[#825a71] uppercase tracking-wider mb-0.5">{item.tag}</div>
-                    <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-[#825a71] transition-colors leading-tight line-clamp-2">{item.title}</div>
+                    <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-0.5">{item.tag}</div>
+                    <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-accent transition-colors leading-tight line-clamp-2">{item.title}</div>
                   </div>
                 </a>
               ))}
@@ -84,11 +84,11 @@ function CodeLists() {
                     <img src={item.logo} alt="Store Logo" className="max-h-[35px] max-w-[85px] object-contain" />
                   </div>
 
-                  <div className="h-[55%] border-l border-dashed border-[#825a71] opacity-40"></div>
+                  <div className="h-[55%] border-l border-dashed border-accent opacity-40"></div>
 
                   <div className="flex-1 pl-4 pr-3 py-2 flex flex-col justify-center">
-                    <div className="text-[10px] font-bold text-[#825a71] uppercase tracking-wider mb-0.5">{item.tag}</div>
-                    <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-[#825a71] transition-colors leading-tight line-clamp-2">{item.title}</div>
+                    <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-0.5">{item.tag}</div>
+                    <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-accent transition-colors leading-tight line-clamp-2">{item.title}</div>
                   </div>
                 </a>
               ))}

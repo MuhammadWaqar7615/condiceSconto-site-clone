@@ -13,7 +13,7 @@ function StoreCategorySection({ letter, storesList }) {
     <section id={`store-${letter}`} className="mb-[24px] scroll-mt-[90px]">
       {/* Section heading: Purple badge letter + count */}
       <div className="flex items-center gap-[10px] mb-[8px] pt-[8px]">
-        <span className="inline-flex items-center justify-center w-[30px] h-[30px] bg-[#78546b] text-white text-[15px] font-bold rounded-sm leading-none flex-shrink-0 shadow-sm">
+        <span className="inline-flex items-center justify-center w-[30px] h-[30px] bg-accent text-white text-[15px] font-bold rounded-sm leading-none flex-shrink-0 shadow-sm">
           {letter}
         </span>
         <span className="text-[13px] text-[#999] font-normal leading-[16px]">

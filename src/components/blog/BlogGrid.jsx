@@ -107,7 +107,7 @@ export default function BlogGrid() {
               />
             </div>
             <div className="p-[20px] flex-grow flex flex-col">
-              <h3 className="text-[#78546b] text-[16px] font-bold mb-[8px] leading-snug group-hover:text-[#68485d] transition-colors">
+              <h3 className="text-accent text-[16px] font-bold mb-[8px] leading-snug group-hover:text-accent-hover transition-colors">
                 {post.title}
               </h3>
               <p className="text-[#666666] text-[13px] leading-relaxed">

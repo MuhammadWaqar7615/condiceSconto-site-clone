@@ -22,7 +22,7 @@ function StoreItem({ store }) {
         />
       </div>
       {/* Store name */}
-      <span className="text-[13px] text-[#555] group-hover:text-[#78546b] transition-colors duration-150 leading-[16px] truncate">
+      <span className="text-[13px] text-[#555] group-hover:text-accent transition-colors duration-150 leading-[16px] truncate">
         {store.name}
       </span>
     </a>

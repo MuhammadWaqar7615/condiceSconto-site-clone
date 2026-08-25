@@ -99,8 +99,8 @@ const mockOffers = [
 
 function SecondaryOffers() {
   return (
-    <section className="py-12 bg-[#787878]">
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6">
+    <section className="py-12">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 bg-primary-dark rounded-2xl py-8">
 
         {/* 3x3 Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">

@@ -16,7 +16,7 @@ function AlphabetNavigation({ letters }) {
         <a
           key={letter}
           href={`#store-${letter}`}
-          className="flex-shrink-0 px-[7px] py-[3px] text-[12px] font-bold text-[#78546b] hover:text-[#5e3f53] hover:underline transition-colors duration-100"
+          className="flex-shrink-0 px-[7px] py-[3px] text-[12px] font-bold text-accent hover:text-[#5e3f53] hover:underline transition-colors duration-100"
           onClick={(e) => {
             e.preventDefault();
             const target = document.getElementById(`store-${letter}`);

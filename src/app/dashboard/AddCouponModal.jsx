@@ -158,7 +158,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                   name="couponType"
                   value={couponType}
                   onChange={(e) => setCouponType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900 bg-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900 bg-white"
                 >
                   <option value="code">Code Expose</option>
                   <option value="link">Embedded Link</option>
@@ -172,7 +172,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                   placeholder="e.g. 20% Off All Orders"
                 />
               </div>
@@ -184,7 +184,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                   rows="2"
                   value={formData.description}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                   placeholder="Brief description of the deal..."
                 />
               </div>
@@ -196,7 +196,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                   name="discountValue"
                   value={formData.discountValue}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                   placeholder="e.g. 20%, 15€, FREE SHIPPING"
                 />
               </div>
@@ -209,7 +209,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                     name="code"
                     value={formData.code}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-[#835674] rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900 bg-pink-50/30"
+                    className="w-full px-3 py-2 border border-accent rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900 bg-pink-50/30"
                     placeholder="e.g. SAVE20"
                   />
                 </div>
@@ -236,7 +236,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                   rows="2"
                   value={formData.terms}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                   placeholder="Optional terms..."
                 />
               </div>
@@ -249,7 +249,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                     name="startsAt"
                     value={formData.startsAt}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                   />
                 </div>
                 <div>
@@ -259,7 +259,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                     name="expiresAt"
                     value={formData.expiresAt}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#835674] focus:border-[#835674] text-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900"
                   />
                 </div>
               </div>
@@ -271,7 +271,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                     name="isActive"
                     checked={formData.isActive}
                     onChange={handleInputChange}
-                    className="w-4 h-4 text-[#835674] focus:ring-[#835674] border-gray-300 rounded"
+                    className="w-4 h-4 text-accent focus:ring-accent border-gray-300 rounded"
                   />
                   <span className="text-sm font-medium text-gray-700">Active</span>
                 </label>
@@ -282,7 +282,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                     name="isFeatured"
                     checked={formData.isFeatured}
                     onChange={handleInputChange}
-                    className="w-4 h-4 text-[#835674] focus:ring-[#835674] border-gray-300 rounded"
+                    className="w-4 h-4 text-accent focus:ring-accent border-gray-300 rounded"
                   />
                   <span className="text-sm font-medium text-gray-700">Featured</span>
                 </label>
@@ -299,7 +299,7 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                   Cancel
                 </button>
                 <button
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#835674] border border-transparent rounded-md shadow-sm hover:bg-[#6c4660] focus:outline-none transition-colors disabled:opacity-50 flex items-center gap-2"
+                  className="px-4 py-2 text-sm font-medium text-white bg-accent border border-transparent rounded-md shadow-sm hover:bg-accent-hover focus:outline-none transition-colors disabled:opacity-50 flex items-center gap-2"
                   type="submit"
                   disabled={isLoading}
                 >
