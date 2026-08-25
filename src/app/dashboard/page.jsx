@@ -54,7 +54,7 @@ export default async function DashboardPage({ searchParams }) {
     <main className="min-h-screen bg-white">
       <div className="w-full">
         
-        <div className="px-4 md:px-8 py-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-purple-50">
+        <div className="px-4 md:px-8 py-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-accent-light">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-sm text-gray-600 mt-1">Welcome, {user.role}</p>
@@ -63,13 +63,13 @@ export default async function DashboardPage({ searchParams }) {
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
             <Link
               href="/dashboard/coupons"
-              className="px-4 py-2 bg-white border border-[#835674] text-[#835674] rounded-lg text-sm font-medium hover:bg-purple-50 transition-colors shadow-sm text-center flex-1 md:flex-none"
+              className="px-4 py-2 bg-white border border-accent text-accent rounded-lg text-sm font-medium hover:bg-accent-light transition-colors shadow-sm text-center flex-1 md:flex-none"
             >
               Manage Coupons
             </Link>
             <Link
               href="/dashboard/stores/new"
-              className="px-4 py-2 bg-[#835674] text-white rounded-lg text-sm font-medium hover:bg-[#6c4660] transition-colors shadow-sm text-center flex-1 md:flex-none"
+              className="px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors shadow-sm text-center flex-1 md:flex-none"
             >
               Add Store
             </Link>
