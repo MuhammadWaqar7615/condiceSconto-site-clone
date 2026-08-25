@@ -56,7 +56,7 @@ function HeroSection() {
   };
 
   return (
-    <section className="bg-[#78546b] pt-3 pb-2">
+    <section className="bg-main pt-3 pb-2">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
 
         {/* Main Hero Card & Image Area */}
@@ -82,10 +82,10 @@ function HeroSection() {
 
                 <div className="mt-4 flex flex-col items-center">
                   <span className="text-gray-600 font-bold text-xs uppercase tracking-wider mb-1">FINO A</span>
-                  <span className="text-[42px] font-bold text-[#78546b] leading-none mb-6">{slide.discount}</span>
+                  <span className="text-[42px] font-bold text-accent leading-none mb-6">{slide.discount}</span>
                 </div>
 
-                <a href="#" className="bg-[#78546b] hover:bg-[#68485d] text-white text-[15px] font-semibold py-3 px-8 rounded-sm transition-colors w-full sm:w-auto">
+                <a href="#" className="bg-accent hover:bg-accent-hover text-white text-[15px] font-semibold py-3 px-8 rounded-sm transition-colors w-full sm:w-auto">
                   Scopri Codice
                 </a>
               </div>
@@ -143,10 +143,10 @@ function HeroSection() {
             </a>
           ))}
           {/* Last distinct item: "Tutti i 3568 negozi" */}
-          <Link href="/negozi" className="bg-white rounded-sm p-4 flex-1 flex flex-col items-center justify-center min-w-[30%] sm:min-w-[15%] md:min-w-[12%] lg:min-w-0 shrink-0 snap-start hover:shadow-md transition-shadow h-[90px] border border-transparent hover:border-[#78546b]">
+          <Link href="/negozi" className="bg-white rounded-sm p-4 flex-1 flex flex-col items-center justify-center min-w-[30%] sm:min-w-[15%] md:min-w-[12%] lg:min-w-0 shrink-0 snap-start hover:shadow-md transition-shadow h-[90px] border border-transparent hover:border-accent">
             <span className="text-gray-500 text-[11px] font-semibold uppercase tracking-wider text-center leading-tight">
               TUTTI I <br />
-              <span className="text-[#78546b] text-xl font-bold">3568</span> <br />
+              <span className="text-accent text-xl font-bold">3568</span> <br />
               NEGOZI
             </span>
           </Link>
