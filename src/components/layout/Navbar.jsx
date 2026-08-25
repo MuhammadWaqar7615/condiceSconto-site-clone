@@ -15,8 +15,8 @@ function Navbar() {
   const getNavLinkClass = (href) => {
     const isActive = pathname === href || pathname.startsWith(href + '/');
     return isActive
-      ? "text-[#78546b] hover:text-[#68485d] text-[12px] font-bold uppercase tracking-wide"
-      : "text-[#666666] hover:text-[#78546b] text-[12px] font-bold uppercase tracking-wide";
+      ? "text-accent hover:text-accent-hover text-[12px] font-bold uppercase tracking-wide"
+      : "text-[#666666] hover:text-accent text-[12px] font-bold uppercase tracking-wide";
   };
 
   return (
@@ -48,11 +48,11 @@ function Navbar() {
                 type="text"
                 name="q"
                 placeholder="Cerca su CodiceSconto"
-                className="w-full border border-[#e5e5e5] rounded-[3px] py-[8px] px-4 pr-10 focus:outline-none focus:ring-1 focus:ring-[#78546b] focus:border-[#78546b] text-[13px] text-gray-700 placeholder-gray-400 bg-[#fbfbfb]"
+                className="w-full border border-[#e5e5e5] rounded-[3px] py-[8px] px-4 pr-10 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent text-[13px] text-gray-700 placeholder-gray-400 bg-[#fbfbfb]"
               />
               <button
                 type="submit"
-                className="absolute right-0 top-0 bottom-0 text-gray-500 w-10 flex items-center justify-center hover:text-[#78546b]"
+                className="absolute right-0 top-0 bottom-0 text-gray-500 w-10 flex items-center justify-center hover:text-accent"
                 aria-label="Cerca"
               >
                 <svg className="h-[16px] w-[16px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,10 +69,10 @@ function Navbar() {
             <Link href="/blog" className={getNavLinkClass("/blog")}>Blog</Link>
 
             <div className="flex items-center space-x-[8px] pl-[8px]">
-              <Link href="/aggiungi-negozio" className="border border-[#78546b] text-[#78546b] px-[12px] py-[6px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-[#fcfafb] transition-colors">
+              <Link href="/aggiungi-negozio" className="border border-accent text-accent px-[12px] py-[6px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-[#fcfafb] transition-colors">
                 Aggiungi negozio
               </Link>
-              <Link href="/account/login" className="bg-[#78546b] text-white px-[16px] py-[7px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-[#68485d] transition-colors">
+              <Link href="/account/login" className="bg-primary-dark text-white px-[16px] py-[7px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-primary-dark-hover transition-colors">
                 Accedi
               </Link>
             </div>
@@ -82,7 +82,7 @@ function Navbar() {
           <div className="flex items-center lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-[#78546b] focus:outline-none p-2"
+              className="text-gray-700 hover:text-accent focus:outline-none p-2"
               aria-label="Apri/Chiudi menù"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,11 +101,11 @@ function Navbar() {
       {isOpen && (
         <div className="lg:hidden bg-white border-t border-gray-200 absolute w-full shadow-lg z-50">
           <div className="px-4 pt-2 pb-4 space-y-1">
-            <Link href="/negozi" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-[#78546b] hover:bg-gray-50 border-b border-gray-100">Negozi</Link>
-            <Link href="/offerte" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-[#78546b] hover:bg-gray-50 border-b border-gray-100">Offerte</Link>
-            <Link href="/blog" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-[#78546b] hover:bg-gray-50 border-b border-gray-100">Blog</Link>
-            <Link href="/aggiungi-negozio" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-[#78546b] hover:bg-gray-50 border-b border-gray-100">Aggiungi negozio</Link>
-            <Link href="/account/login" onClick={() => setIsOpen(false)} className="block text-center mt-3 bg-[#78546b] text-white px-3 py-3 rounded-sm text-[13px] font-bold uppercase hover:bg-[#68485d]">
+            <Link href="/negozi" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-accent hover:bg-gray-50 border-b border-gray-100">Negozi</Link>
+            <Link href="/offerte" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-accent hover:bg-gray-50 border-b border-gray-100">Offerte</Link>
+            <Link href="/blog" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-accent hover:bg-gray-50 border-b border-gray-100">Blog</Link>
+            <Link href="/aggiungi-negozio" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-accent hover:bg-gray-50 border-b border-gray-100">Aggiungi negozio</Link>
+            <Link href="/account/login" onClick={() => setIsOpen(false)} className="block text-center mt-3 bg-primary-dark text-white px-3 py-3 rounded-sm text-[13px] font-bold uppercase hover:bg-primary-dark-hover">
               Accedi
             </Link>
           </div>
