@@ -33,7 +33,7 @@ function StoresHeader({ storeCount }) {
           onClick={() => setCashbackOnly(!cashbackOnly)}
           className={`
             relative w-[40px] h-[22px] rounded-full transition-colors duration-200 flex-shrink-0 cursor-pointer
-            ${cashbackOnly ? "bg-[#78546b]" : "bg-[#ccc]"}
+            ${cashbackOnly ? "bg-accent" : "bg-[#ccc]"}
           `}
         >
           <span
