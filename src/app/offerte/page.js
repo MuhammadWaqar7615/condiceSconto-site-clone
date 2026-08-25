@@ -121,11 +121,11 @@ const categories = [
 
 export default function OffertePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#f3f4f6]">
+    <div className="flex flex-col min-h-screen bg-main">
       <Navbar />
 
       {/* Top Banner */}
-      <div className="bg-[#835674] w-full py-4 mb-4">
+      <div className="bg-primary-dark w-full py-4 mb-4">
         <div className="max-w-[1040px] mx-auto px-4 sm:px-6">
           <h1 className="text-white text-2xl font-light">Tutte le categorie</h1>
         </div>
@@ -144,7 +144,7 @@ export default function OffertePage() {
                   className="w-full h-[150px] object-cover"
                 />
                 <div className="p-3 px-10">
-                  <h2 className="text-[#78546b] font-bold text-[14px] mb-1">{category.name}</h2>
+                  <h2 className="text-accent font-bold text-[14px] mb-1">{category.name}</h2>
                   {category.sub.length > 0 && (
                     <ul className="mt-2">
                       {category.sub.map((item, idx) => (

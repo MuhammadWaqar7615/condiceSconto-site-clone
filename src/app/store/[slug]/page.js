@@ -64,7 +64,7 @@ export default async function StorePage({ params }) {
   }));
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f4f5f7]">
+    <div className="flex flex-col min-h-screen bg-main">
       <Navbar />
       
       {/* Hero Banner Section */}
@@ -112,7 +112,7 @@ export default async function StorePage({ params }) {
               
               <div className="w-full flex justify-between items-center text-sm text-gray-600 bg-gray-50 rounded-lg p-3 border border-gray-100">
                 <span className="font-medium">Offerte attive</span>
-                <span className="font-bold text-white bg-[#835674] px-2.5 py-1 rounded-md text-xs">{coupons.length}</span>
+                <span className="font-bold text-white bg-accent px-2.5 py-1 rounded-md text-xs">{coupons.length}</span>
               </div>
               
             </div>

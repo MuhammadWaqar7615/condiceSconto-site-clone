@@ -38,7 +38,7 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="flex flex-col min-h-screen bg-[#eaedf2]">
+    <div className="flex flex-col min-h-screen bg-section-light">
       <Navbar />
 
       <main className="flex-grow flex items-center justify-center font-arial px-4 py-3">
@@ -105,7 +105,7 @@ export default function LoginPage() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-[#825776]"
+                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-accent"
                   required
                 />
               </div>
@@ -115,7 +115,7 @@ export default function LoginPage() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-[#825776]"
+                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-accent"
                   required
                 />
               </div>
@@ -160,7 +160,7 @@ export default function LoginPage() {
                 type="submit"
                 disabled={isLoading}
                 className={`w-full text-white font-medium py-3 rounded text-[16px] transition-colors mt-2 ${
-                  isLoading ? "bg-[#a6869c] cursor-not-allowed" : "bg-[#825776] hover:bg-[#724a67]"
+                  isLoading ? "bg-accent-muted cursor-not-allowed" : "bg-accent hover:bg-accent-hover"
                 }`}
               >
                 {isLoading ? "Accesso in corso..." : "Entra"}
@@ -169,7 +169,7 @@ export default function LoginPage() {
           </div>
 
           {/* Registration Footer area attached to card */}
-          <div className="bg-[#714f68] py-[16px] text-center">
+          <div className="bg-primary-dark py-[16px] text-center">
             <p className="text-[15px] text-[#e0e0e0]">
               Non hai un account? <a href="/account/registrati" className="text-white font-bold hover:underline ml-1">REGISTRATI</a>
             </p>

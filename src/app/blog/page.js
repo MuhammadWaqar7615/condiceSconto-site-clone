@@ -21,7 +21,7 @@ export default function BlogPage() {
       <Navbar />
       
       {/* Page Header (Full Width) */}
-      <div className="w-full bg-[#78546b]">
+      <div className="w-full bg-primary-dark">
         <div className="max-w-[1000px] mx-auto px-4 py-[16px]">
           <h1 className="text-white text-[24px] font-medium tracking-wide">
             Tutti gli articoli
@@ -30,7 +30,7 @@ export default function BlogPage() {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-grow w-full bg-[#f4f4f5]">
+      <main className="flex-grow w-full bg-main">
         <div className="max-w-[1000px] mx-auto px-4 pt-[32px] pb-[40px]">
           
           {/* Featured Post */}
@@ -54,7 +54,7 @@ export default function BlogPage() {
               </p>
               <a 
                 href={featuredPost.url}
-                className="mt-[24px] bg-[#78546b] text-white px-[24px] py-[10px] rounded-[3px] text-[12px] font-bold uppercase tracking-wide hover:bg-[#68485d] transition-colors inline-block"
+                className="mt-[24px] bg-accent text-white px-[24px] py-[10px] rounded-[3px] text-[12px] font-bold uppercase tracking-wide hover:bg-accent-hover transition-colors inline-block"
               >
                 Leggi l'articolo
               </a>

@@ -3,7 +3,7 @@ import Footer from "@/components/layout/Footer";
 
 export default function RegisterPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#eaedf2]">
+    <div className="flex flex-col min-h-screen bg-section-light">
       <Navbar />
 
       <main className="flex-grow flex items-center justify-center font-arial px-4 py-3">
@@ -62,7 +62,7 @@ export default function RegisterPage() {
                 <input
                   type="email"
                   placeholder="Email"
-                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-[#825776]"
+                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-accent"
                   required
                 />
               </div>
@@ -70,7 +70,7 @@ export default function RegisterPage() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-[#825776] pr-12"
+                  className="w-full bg-[#f8f9fa] rounded px-4 py-3.5 text-[15px] text-[#333] placeholder-[#999] focus:outline-none focus:ring-1 focus:ring-accent pr-12"
                   required
                 />
                 <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#555]">
@@ -85,8 +85,8 @@ export default function RegisterPage() {
               <div className="pt-1 pb-1 space-y-3">
                 <label className="flex items-start cursor-pointer">
                   <div className="mt-[2px] mr-2.5 relative flex items-center justify-center">
-                    <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded bg-white checked:bg-white checked:border-[#825776] focus:outline-none focus:ring-1 focus:ring-[#825776] cursor-pointer transition-colors" required />
-                    <svg className="absolute w-3 h-3 text-[#825776] opacity-0 peer-checked:opacity-100 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+                    <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded bg-white checked:bg-white checked:border-accent focus:outline-none focus:ring-1 focus:ring-accent cursor-pointer transition-colors" required />
+                    <svg className="absolute w-3 h-3 text-accent opacity-0 peer-checked:opacity-100 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -96,8 +96,8 @@ export default function RegisterPage() {
                 </label>
                 <label className="flex items-start cursor-pointer">
                   <div className="mt-[2px] mr-2.5 relative flex items-center justify-center">
-                    <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded bg-white checked:bg-white checked:border-[#825776] focus:outline-none focus:ring-1 focus:ring-[#825776] cursor-pointer transition-colors" />
-                    <svg className="absolute w-3 h-3 text-[#825776] opacity-0 peer-checked:opacity-100 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+                    <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded bg-white checked:bg-white checked:border-accent focus:outline-none focus:ring-1 focus:ring-accent cursor-pointer transition-colors" />
+                    <svg className="absolute w-3 h-3 text-accent opacity-0 peer-checked:opacity-100 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -136,7 +136,7 @@ export default function RegisterPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-[#825776] hover:bg-[#724a67] text-white font-medium py-3 rounded text-[16px] transition-colors mt-2"
+                className="w-full bg-accent hover:bg-accent-hover text-white font-medium py-3 rounded text-[16px] transition-colors mt-2"
               >
                 Registrati
               </button>
@@ -144,7 +144,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Registration Footer area attached to card */}
-          <div className="bg-[#714f68] py-[16px] text-center">
+          <div className="bg-primary-dark py-[16px] text-center">
             <p className="text-[15px] text-[#e0e0e0]">
               Hai già un account? <a href="/account/login" className="text-white font-bold hover:underline ml-1">ENTRA</a>
             </p>
