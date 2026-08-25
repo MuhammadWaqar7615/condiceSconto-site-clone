@@ -127,7 +127,7 @@ export default function EditStorePage({ params }) {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#835674] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all"
                   />
                 </div>
 
@@ -143,7 +143,7 @@ export default function EditStorePage({ params }) {
                     required
                     value={formData.slug}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#835674] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all"
                   />
                   <p className="text-xs text-gray-500 mt-1">Unique identifier (e.g. nike, booking-com)</p>
                 </div>
@@ -161,7 +161,7 @@ export default function EditStorePage({ params }) {
                   required
                   value={formData.logoPath}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#835674] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all"
                 />
                 <p className="text-xs text-gray-500 mt-1">Path to the image (e.g. /images-page2/nike.png)</p>
               </div>
@@ -177,7 +177,7 @@ export default function EditStorePage({ params }) {
                   rows={4}
                   value={formData.description}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#835674] focus:border-transparent outline-none transition-all resize-y"
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all resize-y"
                 ></textarea>
               </div>
 
@@ -192,7 +192,7 @@ export default function EditStorePage({ params }) {
                   name="websiteUrl"
                   value={formData.websiteUrl}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#835674] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all"
                 />
               </div>
 
@@ -204,7 +204,7 @@ export default function EditStorePage({ params }) {
                   name="isActive"
                   checked={formData.isActive}
                   onChange={handleChange}
-                  className="h-4 w-4 text-[#835674] focus:ring-[#835674] border-gray-300 rounded"
+                  className="h-4 w-4 text-accent focus:ring-accent border-gray-300 rounded"
                 />
                 <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
                   Active (visible on /negozi)
@@ -215,7 +215,7 @@ export default function EditStorePage({ params }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2.5 bg-[#835674] text-white rounded-lg text-sm font-medium hover:bg-[#6c4660] transition-colors shadow-sm disabled:opacity-50"
+                  className="px-6 py-2.5 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors shadow-sm disabled:opacity-50"
                 >
                   {loading ? "Saving..." : "Save Changes"}
                 </button>
