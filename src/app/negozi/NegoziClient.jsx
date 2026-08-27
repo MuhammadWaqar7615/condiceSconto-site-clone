@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense, useEffect, useCallback } from "react";
+import React, { Suspense, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
@@ -14,14 +14,8 @@ function NegoziContent({ stores }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const [isCashbackOnly, setIsCashbackOnly] = useState(false);
-  const [selectedLetter, setSelectedLetter] = useState(null);
-
-  // Sync state with URL params on mount and when params change
-  useEffect(() => {
-    setIsCashbackOnly(searchParams.get("cashback") === "true");
-    setSelectedLetter(searchParams.get("letter") || null);
-  }, [searchParams]);
+  const isCashbackOnly = searchParams.get("cashback") === "true";
+  const selectedLetter = searchParams.get("letter") || null;
 
   // Update URL params which in turn updates state via the effect
   const updateParams = useCallback((updates) => {
@@ -100,7 +94,7 @@ function NegoziContent({ stores }) {
           </h1>
           <button
             onClick={() => {
-              updateParams({ cashback: !isCashbackOnly, letter: null });
+              updateParams({ cashback: !isCashbackOnly });
             }}
             className="text-white/80 hover:text-white text-sm cursor-pointer transition-colors font-medium"
           >

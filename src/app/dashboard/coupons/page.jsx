@@ -11,7 +11,7 @@ export const metadata = {
 
 export default async function CouponsPage() {
   const user = await requireAuth();
-  await requireRole(ROLES.ADMIN);
+  await requireRole([ROLES.ADMIN, ROLES.ADMINISTRATION]);
   await connectMongo();
 
   // Fetch all coupons and populate store information

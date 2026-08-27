@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { startTransition, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function EditCouponModal({ isOpen, onClose, coupon }) {
@@ -25,20 +25,22 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
 
   useEffect(() => {
     if (coupon && isOpen) {
-      setCouponType(coupon.type || "code");
-      setFormData({
-        title: coupon.title || "",
-        description: coupon.description || "",
-        discountValue: coupon.discount || "",
-        startsAt: coupon.startsAt ? coupon.startsAt.split("T")[0] : "",
-        expiresAt: coupon.expiresAt ? coupon.expiresAt.split("T")[0] : "",
-        code: coupon.code || "",
-        couponUrl: coupon.couponUrl || "",
-        terms: coupon.terms || "",
-        isActive: coupon.isActive ?? true,
-        isFeatured: coupon.isFeatured ?? false,
+      startTransition(() => {
+        setCouponType(coupon.type || "code");
+        setFormData({
+          title: coupon.title || "",
+          description: coupon.description || "",
+          discountValue: coupon.discount || "",
+          startsAt: coupon.startsAt ? coupon.startsAt.split("T")[0] : "",
+          expiresAt: coupon.expiresAt ? coupon.expiresAt.split("T")[0] : "",
+          code: coupon.code || "",
+          couponUrl: coupon.couponUrl || "",
+          terms: coupon.terms || "",
+          isActive: coupon.isActive ?? true,
+          isFeatured: coupon.isFeatured ?? false,
+        });
+        setError("");
       });
-      setError("");
     }
   }, [coupon, isOpen]);
 

@@ -56,7 +56,7 @@ export default function BlogPage() {
                 href={featuredPost.url}
                 className="mt-[24px] bg-accent text-white px-[24px] py-[10px] rounded-[3px] text-[12px] font-bold uppercase tracking-wide hover:bg-accent-hover transition-colors inline-block"
               >
-                Leggi l'articolo
+                Leggi l&apos;articolo
               </a>
             </div>
           </div>

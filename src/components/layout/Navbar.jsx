@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { startTransition, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { AUTH_TOKEN_STORAGE_KEY } from '@/config/auth';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    startTransition(() => {
+      setIsAuthenticated(Boolean(window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)));
+    });
+  }, []);
 
   /**
    * Returns the appropriate text color class for a nav link
@@ -72,8 +80,8 @@ function Navbar() {
               <Link href="/aggiungi-negozio" className="border border-accent text-accent px-[12px] py-[6px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-[#fcfafb] transition-colors">
                 Aggiungi negozio
               </Link>
-              <Link href="/account/login" className="bg-primary-dark text-white px-[16px] py-[7px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-primary-dark-hover transition-colors">
-                Accedi
+              <Link href={isAuthenticated ? "/dashboard" : "/account/login"} className="bg-primary-dark text-white px-[16px] py-[7px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-primary-dark-hover transition-colors">
+                {isAuthenticated ? "Dashboard" : "Accedi"}
               </Link>
             </div>
           </div>
@@ -105,8 +113,8 @@ function Navbar() {
             <Link href="/offerte" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-accent hover:bg-gray-50 border-b border-gray-100">Offerte</Link>
             <Link href="/blog" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-accent hover:bg-gray-50 border-b border-gray-100">Blog</Link>
             <Link href="/aggiungi-negozio" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-accent hover:bg-gray-50 border-b border-gray-100">Aggiungi negozio</Link>
-            <Link href="/account/login" onClick={() => setIsOpen(false)} className="block text-center mt-3 bg-primary-dark text-white px-3 py-3 rounded-sm text-[13px] font-bold uppercase hover:bg-primary-dark-hover">
-              Accedi
+            <Link href={isAuthenticated ? "/dashboard" : "/account/login"} onClick={() => setIsOpen(false)} className="block text-center mt-3 bg-primary-dark text-white px-3 py-3 rounded-sm text-[13px] font-bold uppercase hover:bg-primary-dark-hover">
+              {isAuthenticated ? "Dashboard" : "Accedi"}
             </Link>
           </div>
         </div>

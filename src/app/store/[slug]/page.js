@@ -1,5 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import connectMongo from "@/lib/mongodb";
 import Store from "@/models/Store";
 import Coupon from "@/models/Coupon";
@@ -72,9 +73,9 @@ export default async function StorePage({ params }) {
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           {/* Breadcrumbs */}
           <div className="text-white/80 text-[12px] flex items-center gap-2 font-medium tracking-wide mb-6">
-            <a href="/" className="hover:text-white transition-colors">Home</a>
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>/</span>
-            <a href="/negozi" className="hover:text-white transition-colors">Negozi</a>
+            <Link href="/negozi" className="hover:text-white transition-colors">Negozi</Link>
             <span>/</span>
             <span className="text-white">{store.name}</span>
           </div>

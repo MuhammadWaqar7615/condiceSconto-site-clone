@@ -35,6 +35,8 @@ export async function createSession(user) {
     sameSite: "lax",
     path: "/",
   });
+
+  return session;
 }
 
 export async function getSession() {

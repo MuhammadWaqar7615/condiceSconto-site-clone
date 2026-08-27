@@ -16,7 +16,7 @@ export default async function DashboardPage({ searchParams }) {
   const user = await requireAuth();
 
   // This will redirect to /dashboard (or show error) if wrong role
-  await requireRole(ROLES.ADMIN);
+  await requireRole([ROLES.ADMIN, ROLES.ADMINISTRATION]);
   await connectMongo();
 
   const sp = await Promise.resolve(searchParams);

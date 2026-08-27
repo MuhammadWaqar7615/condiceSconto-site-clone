@@ -1,5 +1,21 @@
-# condiceSconto-site-clone
-This project is for internship assignment which would be completed in the framework Next.js
+# CodiceSconto
+
+Frontend and admin application for a CodiceSconto-style coupon directory, built with Next.js App Router, React, Tailwind CSS, MongoDB, and JavaScript.
+
+## Project Structure
+
+```text
+src/
+├── app/          # Routes, layouts, server pages, API route handlers
+├── components/   # Shared and feature UI components
+├── data/         # Static catalog fixtures used by the UI and seed scripts
+├── lib/           # Server-only infrastructure: database and authentication
+└── models/        # Mongoose schemas and model definitions
+public/            # Static assets and placeholder images
+scratch/           # Local maintenance and data-seeding scripts
+```
+
+Route-specific client components remain next to their route. Reusable UI belongs in `src/components`, while database access and authentication must stay in `src/lib` and `src/models` so server-only code is not imported into client components.
 
 ## Getting Started
 
@@ -17,9 +33,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application uses the App Router under `src/app`. The production build is validated with `npm run build`.
 
 ## Learn More
 

@@ -74,7 +74,6 @@ couponSchema.pre("validate", function () {
   }
 });
 
-delete mongoose.models.Coupon;
-const Coupon = mongoose.model("Coupon", couponSchema);
+const Coupon = mongoose.models.Coupon || mongoose.model("Coupon", couponSchema);
 
 export default Coupon;

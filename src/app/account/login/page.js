@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { AUTH_TOKEN_STORAGE_KEY } from "@/config/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,10 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        if (data.token) {
+          window.localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, data.token);
+        }
         router.push("/dashboard");
         router.refresh();
       } else {

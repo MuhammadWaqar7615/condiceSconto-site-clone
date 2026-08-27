@@ -1,6 +1,9 @@
 import { getSession } from "./session";
 import { redirect } from "next/navigation";
 import { ROLES } from "./roles";
+import connectMongo from "@/lib/mongodb";
+import User from "@/models/User";
+import { verifyPassword } from "./password";
 
 export async function authenticateUser(email, password) {
   const adminEmail = process.env.ADMIN_EMAIL;
@@ -19,9 +22,16 @@ export async function authenticateUser(email, password) {
     };
   }
 
-  // In the future, this is where you would query the database for regular users
-  // const user = await User.findOne({ email });
-  // if (user && comparePasswords(password, user.password)) return user;
+  await connectMongo();
+  const user = await User.findOne({ email: email.toLowerCase(), status: "enabled" }).lean();
+  if (user && await verifyPassword(password, user.passwordHash)) {
+    return {
+      userId: user._id.toString(),
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    };
+  }
 
   return null; // Invalid credentials
 }
