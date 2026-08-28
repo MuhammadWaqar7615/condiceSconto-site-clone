@@ -7,7 +7,8 @@ import Link from "next/link";
 const emptyBanner = {
   heading: "",
   description: "",
-  image: "/images/placeholder.png",
+  image: "",
+  imagePublicId: "",
   status: "enabled",
 };
 
@@ -16,21 +17,26 @@ export default function PromoBannerForm({ promoBanner }) {
   const isEditing = Boolean(promoBanner?._id);
   const [formData, setFormData] = useState(promoBanner ? { ...emptyBanner, ...promoBanner } : emptyBanner);
   const [preview, setPreview] = useState(promoBanner?.image || emptyBanner.image);
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((current) => ({ ...current, [name]: value }));
-    if (name === "image") setPreview(value || emptyBanner.image);
   };
 
   const handleFile = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setPreview(String(reader.result));
-    reader.readAsDataURL(file);
+    if (!file.type.startsWith("image/")) {
+      setError("Please select a valid image file.");
+      return;
+    }
+    setImageFile(file);
+    setPreview(URL.createObjectURL(file));
+    setError("");
   };
 
   const handleSubmit = async (event) => {
@@ -38,10 +44,35 @@ export default function PromoBannerForm({ promoBanner }) {
     setLoading(true);
     setError("");
     try {
+      let finalFormData = { ...formData };
+
+      // Upload image first if a new file is selected
+      if (imageFile) {
+        setUploadingImage(true);
+        const imageFormData = new FormData();
+        imageFormData.append("file", imageFile);
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: imageFormData,
+        });
+
+        if (!uploadRes.ok) {
+          const errData = await uploadRes.json();
+          throw new Error(errData.message || "Failed to upload image");
+        }
+
+        const uploadData = await uploadRes.json();
+        setUploadingImage(false);
+
+        finalFormData.image = uploadData.url;
+        finalFormData.imagePublicId = uploadData.public_id;
+      }
+
       const response = await fetch(isEditing ? `/api/promo-banners/${promoBanner._id}` : "/api/promo-banners", {
         method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(finalFormData),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Unable to save promo banner.");
@@ -50,6 +81,7 @@ export default function PromoBannerForm({ promoBanner }) {
     } catch (submitError) {
       setError(submitError.message);
       setLoading(false);
+      setUploadingImage(false);
     }
   };
 
@@ -70,22 +102,25 @@ export default function PromoBannerForm({ promoBanner }) {
             <label htmlFor="description" className="mb-1 block text-sm font-medium text-gray-700">Description *</label>
             <textarea id="description" name="description" required rows="5" value={formData.description} onChange={handleChange} className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent" />
           </div>
+          
           <div className="grid gap-6 border-t border-gray-100 pt-6 md:grid-cols-2">
             <div>
               <label htmlFor="status" className="mb-1 block text-sm font-medium text-gray-700">Status</label>
               <select id="status" name="status" value={formData.status} onChange={handleChange} className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select>
             </div>
-            <div>
-              <label htmlFor="image" className="mb-1 block text-sm font-medium text-gray-700">Image path *</label>
-              <input id="image" name="image" required value={formData.image} onChange={handleChange} className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent" />
-            </div>
           </div>
           <section className="border-t border-gray-100 pt-6">
-            <input type="file" accept="image/*" onChange={handleFile} className="block w-full text-sm text-gray-600" />
-            <p className="mt-2 text-xs text-gray-500">Choose an image to preview. Recommended size: 350 x 350. Save a hosted/public image path in the field above.</p>
-            <div className="mt-4 flex h-40 w-full max-w-md items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50 p-2"><img src={preview} alt="Promo banner preview" className="max-h-full max-w-full object-contain" /></div>
+            <label htmlFor="imageFile" className="mb-1 block text-sm font-medium text-gray-700">Promo Banner Image *</label>
+            <input type="file" id="imageFile" accept="image/*" onChange={handleFile} className="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent-hover" />
+            <p className="mt-2 text-xs text-gray-500">Recommended size: 350 x 350.</p>
+            {preview && (
+              <div className="mt-4 flex h-40 w-full max-w-md items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50 p-2">
+                <img src={preview} alt="Promo banner preview" className="max-h-full max-w-full object-contain" />
+              </div>
+            )}
           </section>
-          <div className="flex justify-end border-t border-gray-100 pt-6"><button type="submit" disabled={loading} className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-accent-hover disabled:opacity-50">{loading ? "Saving..." : "Save Promo Banner"}</button></div>
+          
+          <div className="flex justify-end border-t border-gray-100 pt-6"><button type="submit" disabled={loading} className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-accent-hover disabled:opacity-50">{loading ? (uploadingImage ? "Uploading Image..." : "Saving...") : "Save Promo Banner"}</button></div>
         </form>
       </div>
     </main>

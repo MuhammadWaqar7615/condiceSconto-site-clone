@@ -31,7 +31,7 @@ export async function POST(request) {
       return NextResponse.json({ message: "Name and image are required." }, { status: 400 });
     }
     await connectMongo();
-    const badge = await Badge.create({ name: body.name, image: body.image });
+    const badge = await Badge.create({ name: body.name, image: body.image, imagePublicId: body.imagePublicId });
     return NextResponse.json({ badge }, { status: 201 });
   } catch (error) {
     console.error("POST /api/badges Error:", error);

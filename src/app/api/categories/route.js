@@ -51,6 +51,7 @@ export async function POST(request) {
       seoDescription: body.seoDescription,
       status: body.status,
       image: body.image,
+      imagePublicId: body.imagePublicId,
     });
 
     return NextResponse.json({ category }, { status: 201 });

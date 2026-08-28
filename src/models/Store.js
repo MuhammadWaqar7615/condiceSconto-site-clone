@@ -19,6 +19,10 @@ const storeSchema = new mongoose.Schema(
       required: [true, "Store logo is required"],
       default: "/images/placeholder.png",
     },
+    logoPublicId: {
+      type: String,
+      default: "",
+    },
     description: {
       type: String,
       trim: true,

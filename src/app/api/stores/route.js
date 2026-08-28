@@ -57,7 +57,7 @@ export async function POST(request) {
     // Check for required fields
     if (!data.name || !data.slug || !data.logoPath) {
       return NextResponse.json(
-        { message: "Name, slug, and logoPath are required." },
+        { message: "Name, slug, and logo are required." },
         { status: 400 }
       );
     }

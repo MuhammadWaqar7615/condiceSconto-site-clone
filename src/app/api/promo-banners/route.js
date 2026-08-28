@@ -39,6 +39,7 @@ export async function POST(request) {
       heading: body.heading,
       description: body.description,
       image: body.image,
+      imagePublicId: body.imagePublicId,
       status: body.status,
     });
     return NextResponse.json({ promoBanner }, { status: 201 });

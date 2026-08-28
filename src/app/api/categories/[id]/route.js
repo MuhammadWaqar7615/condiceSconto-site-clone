@@ -4,6 +4,7 @@ import Category from "@/models/Category";
 import connectMongo from "@/lib/mongodb";
 import { getSession } from "@/lib/auth/session";
 import { ROLES } from "@/lib/auth/roles";
+import cloudinary from "@/lib/cloudinary";
 
 async function requireAdmin() {
   const session = await getSession();
@@ -39,6 +40,17 @@ export async function PUT(request, { params }) {
 
     await connectMongo();
     const body = await request.json();
+
+    // Check if image changed and delete old image from Cloudinary
+    const currentCategory = await Category.findById(id);
+    if (currentCategory && currentCategory.imagePublicId && body.imagePublicId && currentCategory.imagePublicId !== body.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(currentCategory.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete old category image from Cloudinary:", err);
+      }
+    }
+
     const category = await Category.findByIdAndUpdate(id, body, { new: true, runValidators: true }).lean();
     if (!category) return NextResponse.json({ message: "Category not found" }, { status: 404 });
     return NextResponse.json({ category });
@@ -59,8 +71,19 @@ export async function DELETE(request, { params }) {
     if (!validateId(id)) return NextResponse.json({ message: "Invalid category ID" }, { status: 400 });
 
     await connectMongo();
-    const category = await Category.findByIdAndDelete(id);
-    if (!category) return NextResponse.json({ message: "Category not found" }, { status: 404 });
+    const categoryToDelete = await Category.findById(id);
+    if (!categoryToDelete) return NextResponse.json({ message: "Category not found" }, { status: 404 });
+
+    // Delete image from Cloudinary if it exists
+    if (categoryToDelete.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(categoryToDelete.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete category image from Cloudinary:", err);
+      }
+    }
+
+    await Category.findByIdAndDelete(id);
     return NextResponse.json({ message: "Category deleted successfully" });
   } catch (error) {
     console.error("DELETE /api/categories/[id] Error:", error);

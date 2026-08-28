@@ -4,18 +4,24 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { use } from "react";
+import Image from "next/image";
 
 export default function EditStorePage({ params }) {
   const unwrappedParams = use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState("");
+  
+  const [logoFile, setLogoFile] = useState(null);
+  const [logoPreview, setLogoPreview] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
     logoPath: "",
+    logoPublicId: "",
     description: "",
     websiteUrl: "",
     isActive: true,
@@ -31,10 +37,14 @@ export default function EditStorePage({ params }) {
             name: data.store.name || "",
             slug: data.store.slug || "",
             logoPath: data.store.logoPath || "",
+            logoPublicId: data.store.logoPublicId || "",
             description: data.store.description || "",
             websiteUrl: data.store.websiteUrl || "",
             isActive: data.store.isActive,
           });
+          if (data.store.logoPath) {
+            setLogoPreview(data.store.logoPath);
+          }
         } else {
           setError("Failed to load store data.");
         }
@@ -57,16 +67,55 @@ export default function EditStorePage({ params }) {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        setError("Please select a valid image file.");
+        return;
+      }
+      setLogoFile(file);
+      setLogoPreview(URL.createObjectURL(file));
+      setError("");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
+      let storeData = { ...formData };
+
+      // 1. Upload new image if selected
+      if (logoFile) {
+        setUploadingImage(true);
+        const imageFormData = new FormData();
+        imageFormData.append("file", logoFile);
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: imageFormData,
+        });
+
+        if (!uploadRes.ok) {
+          const errData = await uploadRes.json();
+          throw new Error(errData.message || "Failed to upload image");
+        }
+
+        const uploadData = await uploadRes.json();
+        setUploadingImage(false);
+
+        storeData.logoPath = uploadData.url;
+        storeData.logoPublicId = uploadData.public_id;
+      }
+
+      // 2. Submit store data
       const res = await fetch(`/api/stores/${unwrappedParams.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(storeData),
       });
 
       if (res.ok) {
@@ -78,9 +127,10 @@ export default function EditStorePage({ params }) {
       }
     } catch (err) {
       console.error(err);
-      setError("An unexpected error occurred.");
+      setError(err.message || "An unexpected error occurred.");
     } finally {
       setLoading(false);
+      setUploadingImage(false);
     }
   };
 
@@ -149,21 +199,33 @@ export default function EditStorePage({ params }) {
                 </div>
               </div>
 
-              {/* Logo Path */}
+              {/* Logo File Upload */}
               <div>
-                <label htmlFor="logoPath" className="block text-sm font-medium text-gray-700 mb-1">
-                  Logo Path *
+                <label htmlFor="logoFile" className="block text-sm font-medium text-gray-700 mb-1">
+                  Store Logo
                 </label>
                 <input
-                  type="text"
-                  id="logoPath"
-                  name="logoPath"
-                  required
-                  value={formData.logoPath}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all"
+                  type="file"
+                  id="logoFile"
+                  name="logoFile"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent-hover"
                 />
-                <p className="text-xs text-gray-500 mt-1">Path to the image (e.g. /images-page2/nike.png)</p>
+                <p className="text-xs text-gray-500 mt-1">Select an image file (JPG, PNG, WEBP) to replace the current logo.</p>
+                
+                {logoPreview && (
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-600 mb-2">Current/Preview Logo:</p>
+                    <div className="relative w-32 h-32 border border-gray-200 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
+                      <img
+                        src={logoPreview}
+                        alt="Logo preview"
+                        className="max-h-full max-w-full object-contain p-2"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Description */}
@@ -217,7 +279,7 @@ export default function EditStorePage({ params }) {
                   disabled={loading}
                   className="px-6 py-2.5 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors shadow-sm disabled:opacity-50"
                 >
-                  {loading ? "Saving..." : "Save Changes"}
+                  {loading ? (uploadingImage ? "Uploading Image..." : "Saving...") : "Save Changes"}
                 </button>
               </div>
             </form>

@@ -14,6 +14,10 @@ const badgeSchema = new mongoose.Schema(
       trim: true,
       default: "/images/placeholder.png",
     },
+    imagePublicId: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

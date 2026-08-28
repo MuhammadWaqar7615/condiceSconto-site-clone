@@ -35,7 +35,7 @@ export async function POST(request) {
       return NextResponse.json({ message: "Title, description, and image are required." }, { status: 400 });
     }
     await connectMongo();
-    const post = await BlogPost.create({ title: body.title, description: body.description, image: body.image, status: body.status });
+    const post = await BlogPost.create({ title: body.title, description: body.description, image: body.image, imagePublicId: body.imagePublicId, status: body.status });
     return NextResponse.json({ post }, { status: 201 });
   } catch (error) {
     console.error("POST /api/blog Error:", error);
