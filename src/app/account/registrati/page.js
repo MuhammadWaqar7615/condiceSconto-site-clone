@@ -102,7 +102,7 @@ export default function RegisterPage() {
                     </svg>
                   </div>
                   <span className="text-[13px] text-[#777] leading-relaxed">
-                    Consento l'utilizzo dei miei dati per finalità di marketing
+                    Consento l&apos;utilizzo dei miei dati per finalità di marketing
                   </span>
                 </label>
               </div>

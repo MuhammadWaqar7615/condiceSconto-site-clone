@@ -30,7 +30,7 @@ export async function GET(request, { params }) {
 // PUT /api/coupons/[id]
 export async function PUT(request, { params }) {
   try {
-    await requireRole(ROLES.ADMIN);
+    await requireRole([ROLES.ADMIN, ROLES.ADMINISTRATION]);
     const { id } = await params;
     
     if (!mongoose.Types.ObjectId.isValid(id)) {

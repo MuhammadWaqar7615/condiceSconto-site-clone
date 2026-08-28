@@ -1,6 +1,23 @@
-import React from 'react';
+"use client";
+
+import React, { startTransition, useEffect, useState } from 'react';
 
 function PromoBanner() {
+  const [promoBanner, setPromoBanner] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/promo-banners?status=enabled")
+      .then((response) => response.ok ? response.json() : { promoBanners: [] })
+      .then((data) => {
+        startTransition(() => {
+          setPromoBanner(data.promoBanners?.[0] || null);
+        });
+      })
+      .catch(() => setPromoBanner(null));
+  }, []);
+
+  if (!promoBanner) return null;
+
   return (
     <section className="bg-section-light py-5">
       <div className="max-w-[850px] mx-auto px-4 sm:px-6">
@@ -10,8 +27,8 @@ function PromoBanner() {
           <div className="w-full md:w-1/2 h-[200px] md:h-full relative">
             {/* TODO: Replace placeholder with original image */}
             <img
-              src="/images/banner-img.jpg"
-              alt="Back to School Promo"
+              src={promoBanner.image}
+              alt={promoBanner.heading}
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
           </div>
@@ -19,11 +36,11 @@ function PromoBanner() {
           {/* Right: Text and Button */}
           <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col items-center justify-center text-center px-4 sm:px-12">
             <h3 className="text-accent text-[14px] sm:text-[16px] font-bold mb-3">
-              Dimmi chi sei e ti dirò cosa mettere nel tuo zaino
+              {promoBanner.heading}
             </h3>
 
             <p className="text-[13px] sm:text-[14px] text-gray-500 leading-relaxed mb-6 px-2">
-              Inizia il nuovo anno accademico con il piede giusto, approfitta dei nostri codici sconto per risparmiare su tutto il materiale scolastico e universitario.
+              {promoBanner.description}
             </p>
 
             <div className="w-40 h-px bg-accent opacity-60 mb-5"></div>

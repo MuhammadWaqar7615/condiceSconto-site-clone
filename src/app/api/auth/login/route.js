@@ -22,10 +22,14 @@ export async function POST(request) {
       );
     }
 
-    // Create session (sets HTTP-only cookie)
-    await createSession(user);
+    // Create the HTTP-only session and return the same token for the client app.
+    const token = await createSession(user);
 
-    return NextResponse.json({ success: true, user: { email: user.email, role: user.role } });
+    return NextResponse.json({
+      success: true,
+      token,
+      user: { email: user.email, role: user.role },
+    });
   } catch (error) {
     console.error("Login error:", error);
     // Don't expose internal error details to client

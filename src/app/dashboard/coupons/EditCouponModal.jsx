@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { startTransition, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function EditCouponModal({ isOpen, onClose, coupon }) {
@@ -18,6 +18,10 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
     terms: "",
     isActive: true,
     isFeatured: false,
+    homepageSection: "featured",
+    image: "/images/placeholder.png",
+    labelTop: "",
+    labelBottom: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -25,20 +29,26 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
 
   useEffect(() => {
     if (coupon && isOpen) {
-      setCouponType(coupon.type || "code");
-      setFormData({
-        title: coupon.title || "",
-        description: coupon.description || "",
-        discountValue: coupon.discount || "",
-        startsAt: coupon.startsAt ? coupon.startsAt.split("T")[0] : "",
-        expiresAt: coupon.expiresAt ? coupon.expiresAt.split("T")[0] : "",
-        code: coupon.code || "",
-        couponUrl: coupon.couponUrl || "",
-        terms: coupon.terms || "",
-        isActive: coupon.isActive ?? true,
-        isFeatured: coupon.isFeatured ?? false,
+      startTransition(() => {
+        setCouponType(coupon.type || "code");
+        setFormData({
+          title: coupon.title || "",
+          description: coupon.description || "",
+          discountValue: coupon.discount || "",
+          startsAt: coupon.startsAt ? coupon.startsAt.split("T")[0] : "",
+          expiresAt: coupon.expiresAt ? coupon.expiresAt.split("T")[0] : "",
+          code: coupon.code || "",
+          couponUrl: coupon.couponUrl || "",
+          terms: coupon.terms || "",
+          isActive: coupon.isActive ?? true,
+          isFeatured: coupon.isFeatured ?? false,
+          homepageSection: coupon.homepageSection || "featured",
+          image: coupon.image || "/images/placeholder.png",
+          labelTop: coupon.labelTop || "",
+          labelBottom: coupon.labelBottom || "",
+        });
+        setError("");
       });
-      setError("");
     }
   }, [coupon, isOpen]);
 
@@ -90,6 +100,10 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
         terms: formData.terms,
         isActive: formData.isActive,
         isFeatured: formData.isFeatured,
+        homepageSection: formData.homepageSection,
+        image: formData.image,
+        labelTop: formData.labelTop,
+        labelBottom: formData.labelBottom,
       };
 
       if (formData.startsAt) payload.startsAt = formData.startsAt;
@@ -301,6 +315,25 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                     <span className="text-sm text-gray-700">Featured (Pin to top)</span>
                   </label>
                 </div>
+
+                <div className="border-t border-gray-200 pt-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Section</label>
+                  <select name="homepageSection" value={formData.homepageSection} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900">
+                    <option value="featured">Featured offers (white cards)</option>
+                    <option value="secondary">Secondary offers (image cards)</option>
+                    <option value="new">New codes</option>
+                    <option value="expiring">Expiring codes</option>
+                  </select>
+                  <p className="mt-1 text-xs text-gray-500">Choose where this coupon should appear on the homepage.</p>
+                </div>
+
+                {formData.homepageSection === "secondary" && (
+                  <div><label className="block text-sm font-medium text-gray-700 mb-1">Card image path</label><input name="image" value={formData.image} onChange={handleInputChange} placeholder="/images/placeholder.png" className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900" /></div>
+                )}
+
+                {(formData.homepageSection === "new" || formData.homepageSection === "expiring") && (
+                  <div><label className="block text-sm font-medium text-gray-700 mb-1">List label</label><input name="labelTop" value={formData.labelTop} onChange={handleInputChange} placeholder="CODICE or SPEDIZIONE" className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900" /></div>
+                )}
               </form>
             </div>
             

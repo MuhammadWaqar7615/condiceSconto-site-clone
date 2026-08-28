@@ -1,20 +1,25 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { startTransition, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { AUTH_TOKEN_STORAGE_KEY } from '@/config/auth';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState({ stores: [], coupons: [] });
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const searchRef = useRef(null);
+  useEffect(() => {
+    startTransition(() => {
+      setIsAuthenticated(Boolean(window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)));
+    });
+  }, []);
 
+  /**
+   * Returns the appropriate text color class for a nav link
+   * based on whether it matches the current route.
+   */
   const getNavLinkClass = (href) => {
     const isActive = pathname === href || pathname.startsWith(href + '/');
     return isActive
@@ -94,11 +99,11 @@ function Navbar() {
 
           {/* Search */}
           <div className="flex-1 mx-4 lg:mx-8 max-w-[450px]" ref={searchRef}>
-            <form 
-              className="w-full flex relative" 
+            <form
+              className="w-full flex relative"
               onSubmit={(e) => {
                 e.preventDefault();
-                handleKeyDown({ key: 'Enter', preventDefault: () => {} });
+                handleKeyDown({ key: 'Enter', preventDefault: () => { } });
               }}
             >
               <input
@@ -120,7 +125,7 @@ function Navbar() {
                 aria-label="Cerca"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleKeyDown({ key: 'Enter', preventDefault: () => {} });
+                  handleKeyDown({ key: 'Enter', preventDefault: () => { } });
                 }}
               >
                 <svg className="h-[16px] w-[16px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,8 +143,8 @@ function Navbar() {
                         {searchResults.stores.map((store, idx) => {
                           const isSelected = selectedIndex === idx;
                           return (
-                            <Link 
-                              key={store._id} 
+                            <Link
+                              key={store._id}
                               href={`/store/${store.slug}`}
                               onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
                               className={`flex items-center p-2 rounded-sm transition-colors group ${isSelected ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
@@ -166,8 +171,8 @@ function Navbar() {
                           const globalIdx = searchResults.stores.length + idx;
                           const isSelected = selectedIndex === globalIdx;
                           return (
-                            <Link 
-                              key={coupon._id} 
+                            <Link
+                              key={coupon._id}
                               href={`/store/${coupon.storeId?.slug || ''}`}
                               onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
                               className={`flex items-start p-2 rounded-sm transition-colors group ${isSelected ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
@@ -201,8 +206,8 @@ function Navbar() {
               <Link href="/aggiungi-negozio" className="border border-accent text-accent px-[12px] py-[6px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-[#fcfafb] transition-colors">
                 Aggiungi negozio
               </Link>
-              <Link href="/account/login" className="bg-primary-dark text-white px-[16px] py-[7px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-primary-dark-hover transition-colors">
-                Accedi
+              <Link href={isAuthenticated ? "/dashboard" : "/account/login"} className="bg-primary-dark text-white px-[16px] py-[7px] rounded-[3px] text-[11px] font-bold uppercase tracking-wide hover:bg-primary-dark-hover transition-colors">
+                {isAuthenticated ? "Dashboard" : "Accedi"}
               </Link>
             </div>
           </div>
@@ -234,8 +239,8 @@ function Navbar() {
             <Link href="/offerte" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-accent hover:bg-gray-50 border-b border-gray-100">Offerte</Link>
             <Link href="/blog" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-gray-800 hover:text-accent hover:bg-gray-50 border-b border-gray-100">Blog</Link>
             <Link href="/aggiungi-negozio" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-md text-[13px] font-bold uppercase text-accent hover:bg-gray-50 border-b border-gray-100">Aggiungi negozio</Link>
-            <Link href="/account/login" onClick={() => setIsOpen(false)} className="block text-center mt-3 bg-primary-dark text-white px-3 py-3 rounded-sm text-[13px] font-bold uppercase hover:bg-primary-dark-hover">
-              Accedi
+            <Link href={isAuthenticated ? "/dashboard" : "/account/login"} onClick={() => setIsOpen(false)} className="block text-center mt-3 bg-primary-dark text-white px-3 py-3 rounded-sm text-[13px] font-bold uppercase hover:bg-primary-dark-hover">
+              {isAuthenticated ? "Dashboard" : "Accedi"}
             </Link>
           </div>
         </div>

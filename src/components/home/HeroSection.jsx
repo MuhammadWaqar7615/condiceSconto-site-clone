@@ -3,55 +3,51 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-// Using known valid images from /public/images/
-const mockStores = [
-  { name: "HUAWEI", logo: "/images/huawei.png" },
-  { name: "Temu", logo: "/images/temu.png" },
-  { name: "YOOX", logo: "/images/yoox.png" },
-  { name: "Amazon", logo: "/images/amazon.png" },
-  { name: "SHEIN", logo: "/images/shein.png" },
-  { name: "H&M", logo: "/images/handm.png" },
-];
-
-const mockSlides = [
-  {
-    id: 1,
-    image: "/images/pulsee.jpg",
-    logo: "/images/pulsee.png",
-    text: "Risparmia sulla tua bolletta grazie a questo Codice Sconto Pulsee",
-    discount: "245€"
-  },
-  {
-    id: 2,
-    image: "/images/vevor.jpg",
-    logo: "/images/vevor.png", /* TODO: Replace placeholder with original image */
-    text: "Approfitta delle migliori offerte su attrezzature professionali",
-    discount: "6%"
-  },
-  {
-    id: 3,
-    image: "/images/mobilifiver.jpg",
-    logo: "/images/mobilifiver.png", /* TODO: Replace placeholder with original image */
-    text: "Rinnova i tuoi spazi con i mobili di design esclusivi",
-    discount: "15€"
-  },
-];
-
 function HeroSection() {
+  const [badges, setBadges] = useState([]);
+  const [mockSlides, setMockSlides] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
+    Promise.all([
+      fetch("/api/sliders?status=enabled"),
+      fetch("/api/badges"),
+    ])
+      .then(async ([slidersResponse, badgesResponse]) => ({
+        sliders: slidersResponse.ok ? (await slidersResponse.json()).sliders : [],
+        badges: badgesResponse.ok ? (await badgesResponse.json()).badges : [],
+      }))
+      .then((data) => {
+        setBadges((data.badges || []).map((badge) => ({
+          name: badge.name,
+          logo: badge.image,
+        })));
+        setMockSlides((data.sliders || []).map((slider) => ({
+        id: slider._id,
+        image: slider.image,
+        logo: slider.logo || slider.image,
+        text: slider.description || slider.title,
+        discount: slider.discount || slider.title,
+        link: slider.link || "#",
+        })));
+      });
+  }, []);
+
+  useEffect(() => {
+    if (mockSlides.length < 2) return undefined;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % mockSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [mockSlides.length]);
 
   const handlePrev = () => {
+    if (mockSlides.length === 0) return;
     setCurrentSlide((prev) => (prev === 0 ? mockSlides.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
+    if (mockSlides.length === 0) return;
     setCurrentSlide((prev) => (prev + 1) % mockSlides.length);
   };
 
@@ -85,7 +81,7 @@ function HeroSection() {
                   <span className="text-[42px] font-bold text-accent leading-none mb-6">{slide.discount}</span>
                 </div>
 
-                <a href="#" className="bg-accent hover:bg-accent-hover text-white text-[15px] font-semibold py-3 px-8 rounded-sm transition-colors w-full sm:w-auto">
+                <a href={slide.link || "#"} className="bg-accent hover:bg-accent-hover text-white text-[15px] font-semibold py-3 px-8 rounded-sm transition-colors w-full sm:w-auto">
                   Scopri Codice
                 </a>
               </div>
@@ -134,7 +130,7 @@ function HeroSection() {
 
         {/* Store Logos Row (Offers Slider) */}
         <div className="mt-4 flex overflow-x-auto md:flex-wrap lg:flex-nowrap gap-1.5 pb-2 snap-x hide-scrollbar">
-          {mockStores.map((store, idx) => (
+          {badges.map((store, idx) => (
             <a key={idx} href="#" className="bg-white rounded-sm p-4 flex-1 flex flex-col items-center justify-between min-w-[30%] sm:min-w-[15%] md:min-w-[12%] lg:min-w-0 shrink-0 snap-start hover:shadow-md transition-shadow h-[90px]">
               <div className="flex-1 flex items-center justify-center w-full">
                 <img src={store.logo} alt={store.name} className="max-h-[32px] max-w-full object-contain" />
@@ -142,14 +138,14 @@ function HeroSection() {
               <span className="text-[11px] text-gray-500 font-medium mt-2 tracking-wide">{store.name}</span>
             </a>
           ))}
-          {/* Last distinct item: "Tutti i 3568 negozi" */}
+          {/* Last distinct item: "Tutti i 3568 negozi"
           <Link href="/negozi" className="bg-white rounded-sm p-4 flex-1 flex flex-col items-center justify-center min-w-[30%] sm:min-w-[15%] md:min-w-[12%] lg:min-w-0 shrink-0 snap-start hover:shadow-md transition-shadow h-[90px] border border-transparent hover:border-accent">
             <span className="text-gray-500 text-[11px] font-semibold uppercase tracking-wider text-center leading-tight">
               TUTTI I <br />
               <span className="text-accent text-xl font-bold">3568</span> <br />
               NEGOZI
             </span>
-          </Link>
+          </Link> */}
         </div>
 
       </div>

@@ -17,6 +17,10 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
     terms: "",
     isActive: true,
     isFeatured: false,
+    homepageSection: "featured",
+    image: "/images/placeholder.png",
+    labelTop: "",
+    labelBottom: "",
   });
   
   const [isLoading, setIsLoading] = useState(false);
@@ -74,6 +78,10 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
         terms: formData.terms,
         isActive: formData.isActive,
         isFeatured: formData.isFeatured,
+        homepageSection: formData.homepageSection,
+        image: formData.image,
+        labelTop: formData.labelTop,
+        labelBottom: formData.labelBottom,
       };
 
       if (formData.startsAt) payload.startsAt = formData.startsAt;
@@ -112,6 +120,10 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
         terms: "",
         isActive: true,
         isFeatured: false,
+        homepageSection: "featured",
+        image: "/images/placeholder.png",
+        labelTop: "",
+        labelBottom: "",
       });
       
       router.refresh(); // Refresh the current page to reflect new data
@@ -287,6 +299,36 @@ export default function AddCouponModal({ isOpen, onClose, store }) {
                   <span className="text-sm font-medium text-gray-700">Featured</span>
                 </label>
               </div>
+
+              <div className="border-t border-gray-200 pt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Section</label>
+                <select
+                  name="homepageSection"
+                  value={formData.homepageSection}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent text-gray-900 bg-white"
+                >
+                  <option value="featured">Featured offers (white cards)</option>
+                  <option value="secondary">Secondary offers (image cards)</option>
+                  <option value="new">New codes</option>
+                  <option value="expiring">Expiring codes</option>
+                </select>
+                <p className="mt-1 text-xs text-gray-500">Choose where this coupon should appear on the homepage.</p>
+              </div>
+
+              {formData.homepageSection === "secondary" && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Card image path</label>
+                  <input name="image" value={formData.image} onChange={handleInputChange} placeholder="/images/placeholder.png" className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900" />
+                </div>
+              )}
+
+              {(formData.homepageSection === "new" || formData.homepageSection === "expiring") && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">List label</label>
+                  <input name="labelTop" value={formData.labelTop} onChange={handleInputChange} placeholder="CODICE or SPEDIZIONE" className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900" />
+                </div>
+              )}
 
               {/* Footer */}
               <div className="flex items-center justify-end pt-4 mt-2 border-t border-solid rounded-b border-blueGray-200 gap-2">

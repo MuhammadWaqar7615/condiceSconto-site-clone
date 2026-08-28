@@ -35,8 +35,8 @@ async function seed() {
     // Let's try dynamic import, if it fails, I'll provide the array directly.
     let storesData;
     try {
-      const module = await import("../src/data/stores/storesData.js");
-      storesData = module.stores;
+      const storesModule = await import("../src/data/stores/storesData.js");
+      storesData = storesModule.stores;
     } catch (err) {
       console.warn("Could not dynamically import storesData.js, trying with a local copy...");
       // For simplicity, we just use the raw data if it fails, or regex parse it.

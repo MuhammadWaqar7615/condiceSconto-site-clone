@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 const alphabetLetters = ["#", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
@@ -10,12 +10,8 @@ export default function DashboardSearch() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(() => searchParams.get("search") || "");
   const currentLetter = searchParams.get("letter") || "";
-
-  useEffect(() => {
-    setSearch(searchParams.get("search") || "");
-  }, [searchParams]);
 
   const updateParams = useCallback(
     (key, value) => {
