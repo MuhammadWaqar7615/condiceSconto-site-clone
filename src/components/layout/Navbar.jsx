@@ -1,13 +1,19 @@
 "use client";
 
-import React, { startTransition, useEffect, useState } from 'react';
+import React, { startTransition, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { AUTH_TOKEN_STORAGE_KEY } from '@/config/auth';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState({ stores: [], coupons: [] });
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const searchRef = useRef(null);
+  const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
