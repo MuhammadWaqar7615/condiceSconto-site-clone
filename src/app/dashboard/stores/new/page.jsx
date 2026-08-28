@@ -8,7 +8,7 @@ export default function NewStorePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const [formData, setFormData] = useState({
     name: "",
     slug: "",

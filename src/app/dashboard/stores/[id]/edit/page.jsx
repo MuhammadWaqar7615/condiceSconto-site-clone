@@ -11,7 +11,7 @@ export default function EditStorePage({ params }) {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
