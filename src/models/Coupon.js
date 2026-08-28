@@ -55,6 +55,26 @@ const couponSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    homepageSection: {
+      type: String,
+      enum: ["featured", "secondary", "new", "expiring"],
+      default: "featured",
+    },
+    image: {
+      type: String,
+      trim: true,
+      default: "/images/placeholder.png",
+    },
+    labelTop: {
+      type: String,
+      trim: true,
+      maxlength: 40,
+    },
+    labelBottom: {
+      type: String,
+      trim: true,
+      maxlength: 40,
+    },
   },
   {
     timestamps: true,

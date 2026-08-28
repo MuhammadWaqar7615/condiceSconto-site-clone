@@ -10,7 +10,7 @@ export async function GET(request) {
   try {
     // Only admins should ideally see all coupons in one raw list, but for now we'll just check auth
     // Wait, the instructions say "Admin Coupon List", let's secure it for ADMIN
-    await requireRole(ROLES.ADMIN);
+    await requireRole([ROLES.ADMIN, ROLES.ADMINISTRATION]);
     
     await connectMongo();
     
@@ -40,7 +40,7 @@ export async function GET(request) {
 // POST /api/coupons - Create a new coupon
 export async function POST(request) {
   try {
-    await requireRole(ROLES.ADMIN);
+    await requireRole([ROLES.ADMIN, ROLES.ADMINISTRATION]);
     await connectMongo();
     
     const body = await request.json();
@@ -53,7 +53,11 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: "Coupon URL is required for 'link' type" }, { status: 400 });
     }
     
-    const newCoupon = await Coupon.create(body);
+    const newCoupon = await Coupon.create({
+      ...body,
+      homepageSection: body.homepageSection || "featured",
+      image: body.image || "/images/placeholder.png",
+    });
     
     return NextResponse.json({ success: true, data: newCoupon }, { status: 201 });
   } catch (error) {

@@ -69,6 +69,7 @@ export default function CouponTable({ coupons }) {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Store</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Homepage Section</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Discount</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -94,6 +95,9 @@ export default function CouponTable({ coupons }) {
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${coupon.type === 'code' ? 'bg-accent-light text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
                       {coupon.type === 'code' ? 'Code' : 'Link'}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {{ featured: "Featured offers", secondary: "Secondary offers", new: "New codes", expiring: "Expiring codes" }[coupon.homepageSection || "featured"]}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{coupon.discount}</div>
@@ -125,7 +129,7 @@ export default function CouponTable({ coupons }) {
               ))}
               {coupons.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
                     No coupons found.
                   </td>
                 </tr>

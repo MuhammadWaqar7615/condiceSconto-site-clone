@@ -19,6 +19,7 @@ export default function Sidebar() {
     { name: 'Sliders', href: '/dashboard/sliders', icon: 'L' },
     { name: 'Promo banners', href: '/dashboard/promo-banners', icon: 'P' },
     { name: 'Badges', href: '/dashboard/badges', icon: 'B' },
+    { name: 'Blog', href: '/dashboard/blog', icon: 'G' },
     { name: 'Users', href: '/dashboard/users', icon: 'U' },
     { name: 'Public stores', href: '/negozi', icon: 'S' },
     { name: 'Public offers', href: '/offerte', icon: 'O' },
