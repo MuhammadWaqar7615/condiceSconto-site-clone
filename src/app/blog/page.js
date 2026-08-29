@@ -11,6 +11,8 @@ export const metadata = {
   description: "Articoli e consigli per risparmiare con i codici sconto",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPage() {
   await connectMongo();
   
