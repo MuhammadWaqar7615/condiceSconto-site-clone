@@ -25,7 +25,10 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {
     if (coupon && isOpen) {
@@ -47,6 +50,8 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
           labelTop: coupon.labelTop || "",
           labelBottom: coupon.labelBottom || "",
         });
+        setImagePreview(coupon.image && coupon.image !== "/images/placeholder.png" ? coupon.image : "");
+        setImageFile(null);
         setError("");
       });
     }
@@ -58,6 +63,19 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        setError("Please select a valid image file.");
+        return;
+      }
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+      setError("");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -92,6 +110,27 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
     }
 
     try {
+      let imageUrl = formData.image;
+      if (imageFile) {
+        setUploadingImage(true);
+        const imageFormData = new FormData();
+        imageFormData.append("file", imageFile);
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: imageFormData,
+        });
+
+        if (!uploadRes.ok) {
+          const errData = await uploadRes.json();
+          throw new Error(errData.message || "Failed to upload image");
+        }
+
+        const uploadData = await uploadRes.json();
+        imageUrl = uploadData.url;
+        setUploadingImage(false);
+      }
+
       const payload = {
         type: couponType,
         title: formData.title,
@@ -101,7 +140,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
         isActive: formData.isActive,
         isFeatured: formData.isFeatured,
         homepageSection: formData.homepageSection,
-        image: formData.image,
+        image: imageUrl,
         labelTop: formData.labelTop,
         labelBottom: formData.labelBottom,
       };
@@ -137,6 +176,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
       setError(err.message);
     } finally {
       setIsLoading(false);
+      setUploadingImage(false);
     }
   };
 
@@ -327,9 +367,19 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                   <p className="mt-1 text-xs text-gray-500">Choose where this coupon should appear on the homepage.</p>
                 </div>
 
-                {formData.homepageSection === "secondary" && (
-                  <div><label className="block text-sm font-medium text-gray-700 mb-1">Card image path</label><input name="image" value={formData.image} onChange={handleInputChange} placeholder="/images/placeholder.png" className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900" /></div>
-                )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Coupon Image (Optional)</label>
+                  <input type="file" accept="image/*" onChange={handleFileChange} className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-accent focus:border-accent file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent-hover" />
+                  <p className="mt-1 text-xs text-gray-500">Upload an image for this coupon (will be stored in Cloudinary).</p>
+                  {imagePreview && (
+                    <div className="mt-4">
+                      <p className="text-sm text-gray-600 mb-2">Image Preview:</p>
+                      <div className="relative w-32 h-32 border border-gray-200 rounded-md overflow-hidden bg-gray-50 flex items-center justify-center">
+                        <img src={imagePreview} alt="Preview" className="max-h-full max-w-full object-contain p-2" />
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {(formData.homepageSection === "new" || formData.homepageSection === "expiring") && (
                   <div><label className="block text-sm font-medium text-gray-700 mb-1">List label</label><input name="labelTop" value={formData.labelTop} onChange={handleInputChange} placeholder="CODICE or SPEDIZIONE" className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900" /></div>
@@ -352,7 +402,7 @@ export default function EditCouponModal({ isOpen, onClose, coupon }) {
                 onClick={handleSubmit}
                 disabled={isLoading}
               >
-                {isLoading ? "Saving..." : "Update Coupon"}
+                {isLoading ? (uploadingImage ? "Uploading Image..." : "Saving...") : "Update Coupon"}
               </button>
             </div>
           </div>

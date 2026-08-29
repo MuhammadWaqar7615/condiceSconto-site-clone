@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 function HeroSection() {
+  const scrollContainerRef = useRef(null);
   const [badges, setBadges] = useState([]);
   const [mockSlides, setMockSlides] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isBadgesHovered, setIsBadgesHovered] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -40,6 +42,22 @@ function HeroSection() {
     }, 5000);
     return () => clearInterval(timer);
   }, [mockSlides.length]);
+
+  // Auto-scroll for badges carousel
+  useEffect(() => {
+    if (badges.length < 2 || isBadgesHovered) return undefined;
+    const timer = setInterval(() => {
+      if (scrollContainerRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+      }
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [badges.length, isBadgesHovered]);
 
   const handlePrev = () => {
     if (mockSlides.length === 0) return;
@@ -129,23 +147,44 @@ function HeroSection() {
         </div>
 
         {/* Store Logos Row (Offers Slider) */}
-        <div className="mt-4 flex overflow-x-auto md:flex-wrap lg:flex-nowrap gap-1.5 pb-2 snap-x hide-scrollbar">
-          {badges.map((store, idx) => (
-            <a key={idx} href="#" className="bg-white rounded-sm p-4 flex-1 flex flex-col items-center justify-between min-w-[30%] sm:min-w-[15%] md:min-w-[12%] lg:min-w-0 shrink-0 snap-start hover:shadow-md transition-shadow h-[90px]">
-              <div className="flex-1 flex items-center justify-center w-full">
-                <img src={store.logo} alt={store.name} className="max-h-[32px] max-w-full object-contain" />
-              </div>
-              <span className="text-[11px] text-gray-500 font-medium mt-2 tracking-wide">{store.name}</span>
-            </a>
-          ))}
-          {/* Last distinct item: "Tutti i 3568 negozi"
-          <Link href="/negozi" className="bg-white rounded-sm p-4 flex-1 flex flex-col items-center justify-center min-w-[30%] sm:min-w-[15%] md:min-w-[12%] lg:min-w-0 shrink-0 snap-start hover:shadow-md transition-shadow h-[90px] border border-transparent hover:border-accent">
-            <span className="text-gray-500 text-[11px] font-semibold uppercase tracking-wider text-center leading-tight">
-              TUTTI I <br />
-              <span className="text-accent text-xl font-bold">3568</span> <br />
-              NEGOZI
-            </span>
-          </Link> */}
+        <div 
+          className="relative group mt-4"
+          onMouseEnter={() => setIsBadgesHovered(true)}
+          onMouseLeave={() => setIsBadgesHovered(false)}
+        >
+          <button 
+            onClick={() => scrollContainerRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 z-20 w-8 h-8 bg-white shadow-md hover:bg-gray-100 text-gray-700 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-200"
+            aria-label="Scroll left"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div 
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto flex-nowrap gap-1.5 pb-2 snap-x hide-scrollbar scroll-smooth"
+          >
+            {badges.map((store, idx) => (
+              <a key={idx} href="#" className="bg-white rounded-sm p-4 flex-1 flex flex-col items-center justify-between min-w-[30%] sm:min-w-[20%] md:min-w-[15%] lg:min-w-[12%] shrink-0 snap-start hover:shadow-md transition-shadow h-[90px]">
+                <div className="flex-1 flex items-center justify-center w-full">
+                  <img src={store.logo} alt={store.name} className="max-h-[32px] max-w-full object-contain" />
+                </div>
+                <span className="text-[11px] text-gray-500 font-medium mt-2 tracking-wide">{store.name}</span>
+              </a>
+            ))}
+          </div>
+
+          <button 
+            onClick={() => scrollContainerRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
+            className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 z-20 w-8 h-8 bg-white shadow-md hover:bg-gray-100 text-gray-700 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex border border-gray-200"
+            aria-label="Scroll right"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
 
       </div>
