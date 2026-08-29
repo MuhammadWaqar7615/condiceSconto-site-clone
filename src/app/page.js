@@ -8,6 +8,8 @@ import CodeLists from "@/components/home/CodeLists";
 import Newsletter from "@/components/home/Newsletter";
 import Footer from "@/components/layout/Footer";
 
+export const revalidate = 60;
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-main">

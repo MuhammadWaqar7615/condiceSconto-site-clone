@@ -9,6 +9,8 @@ import Subcategory from "@/models/Subcategory";
 import Store from "@/models/Store";
 import Coupon from "@/models/Coupon";
 
+export const revalidate = 60;
+
 export default async function SubcategoryPage({ params }) {
   await connectMongo();
   const { categorySlug, subcategorySlug } = await params;

@@ -8,6 +8,8 @@ import Category from "@/models/Category";
 import Store from "@/models/Store";
 import Coupon from "@/models/Coupon";
 
+export const revalidate = 60;
+
 export default async function CategoryPage({ params }) {
   await connectMongo();
   const { categorySlug } = await params;

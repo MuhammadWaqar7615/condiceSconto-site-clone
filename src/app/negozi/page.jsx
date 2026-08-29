@@ -9,6 +9,8 @@ export const metadata = {
   description: "Cerca e trova i migliori codici sconto e offerte dei tuoi negozi preferiti.",
 };
 
+export const revalidate = 60;
+
 export default async function NegoziPage() {
   // Fetch active stores from MongoDB
   await connectMongo();
