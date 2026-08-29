@@ -6,6 +6,7 @@ import Link from "next/link";
 
 const emptySubcategory = {
   title: "",
+  slug: "",
   description: "",
   parentCategory: "",
   seoTitle: "",
@@ -66,6 +67,13 @@ export default function SubcategoryForm({ subcategory, categories }) {
               <label htmlFor="title" className="mb-1 block text-sm font-medium text-gray-700">Title *</label>
               <input id="title" name="title" required value={formData.title} onChange={handleChange} className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent" />
             </div>
+            <div>
+              <label htmlFor="slug" className="mb-1 block text-sm font-medium text-gray-700">Slug * (lowercase, unique)</label>
+              <input id="slug" name="slug" required value={formData.slug} onChange={handleChange} className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent" />
+            </div>
+          </section>
+
+          <section className="grid gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="parentCategory" className="mb-1 block text-sm font-medium text-gray-700">Parent Category *</label>
               <select id="parentCategory" name="parentCategory" required value={formData.parentCategory} onChange={handleChange} className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent">

@@ -8,6 +8,13 @@ const subcategorySchema = new mongoose.Schema(
       trim: true,
       maxlength: 120,
     },
+    slug: {
+      type: String,
+      required: [true, "Subcategory slug is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
     description: {
       type: String,
       trim: true,

@@ -43,6 +43,7 @@ export async function POST(request) {
 
     const category = await Category.create({
       title: body.title,
+      slug: body.slug,
       description: body.description,
       icon: body.icon,
       showInMenu: body.showInMenu,

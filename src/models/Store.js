@@ -31,6 +31,14 @@ const storeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    categories: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    }],
+    subcategories: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subcategory",
+    }],
     isActive: {
       type: Boolean,
       default: true,

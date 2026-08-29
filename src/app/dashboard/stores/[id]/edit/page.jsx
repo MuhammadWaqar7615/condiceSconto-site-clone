@@ -24,8 +24,13 @@ export default function EditStorePage({ params }) {
     logoPublicId: "",
     description: "",
     websiteUrl: "",
+    categories: [],
+    subcategories: [],
     isActive: true,
   });
+
+  const [availableCategories, setAvailableCategories] = useState([]);
+  const [availableSubcategories, setAvailableSubcategories] = useState([]);
 
   useEffect(() => {
     const fetchStore = async () => {
@@ -40,8 +45,18 @@ export default function EditStorePage({ params }) {
             logoPublicId: data.store.logoPublicId || "",
             description: data.store.description || "",
             websiteUrl: data.store.websiteUrl || "",
+            categories: data.store.categories || [],
+            subcategories: data.store.subcategories || [],
             isActive: data.store.isActive,
           });
+
+          Promise.all([
+            fetch("/api/categories").then(res => res.json()),
+            fetch("/api/subcategories").then(res => res.json())
+          ]).then(([catData, subData]) => {
+            setAvailableCategories(catData.categories || []);
+            setAvailableSubcategories(subData.subcategories || []);
+          }).catch(err => console.error("Failed to load categories", err));
           if (data.store.logoPath) {
             setLogoPreview(data.store.logoPath);
           }
@@ -61,10 +76,16 @@ export default function EditStorePage({ params }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    if (type === "select-multiple") {
+      const options = Array.from(e.target.options);
+      const selectedValues = options.filter(o => o.selected).map(o => o.value);
+      setFormData((prev) => ({ ...prev, [name]: selectedValues }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -256,6 +277,49 @@ export default function EditStorePage({ params }) {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all"
                 />
+              </div>
+
+              {/* Categories */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="categories" className="block text-sm font-medium text-gray-700 mb-1">
+                    Categories (Hold Ctrl/Cmd to select multiple)
+                  </label>
+                  <select
+                    multiple
+                    id="categories"
+                    name="categories"
+                    value={formData.categories}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent outline-none"
+                    size="5"
+                  >
+                    {availableCategories.map(cat => (
+                      <option key={cat._id} value={cat._id}>{cat.title}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="subcategories" className="block text-sm font-medium text-gray-700 mb-1">
+                    Subcategories
+                  </label>
+                  <select
+                    multiple
+                    id="subcategories"
+                    name="subcategories"
+                    value={formData.subcategories}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent outline-none"
+                    size="5"
+                  >
+                    {availableSubcategories
+                      .filter(sub => formData.categories.includes(sub.parentCategory?._id || sub.parentCategory))
+                      .map(sub => (
+                      <option key={sub._id} value={sub._id}>{sub.title}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Is Active */}

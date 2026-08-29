@@ -7,6 +7,7 @@ import Image from "next/image";
 
 const emptyCategory = {
   title: "",
+  slug: "",
   description: "",
   icon: "",
   showInMenu: true,
@@ -108,6 +109,13 @@ export default function CategoryForm({ category }) {
               <label htmlFor="title" className="mb-1 block text-sm font-medium text-gray-700">Title *</label>
               <input id="title" name="title" required value={formData.title} onChange={handleChange} className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent" />
             </div>
+            <div>
+              <label htmlFor="slug" className="mb-1 block text-sm font-medium text-gray-700">Slug * (lowercase, unique)</label>
+              <input id="slug" name="slug" required value={formData.slug} onChange={handleChange} className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent" />
+            </div>
+          </section>
+
+          <section className="grid gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="icon" className="mb-1 block text-sm font-medium text-gray-700">Icon</label>
               <div className="flex gap-2">
