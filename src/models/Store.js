@@ -19,6 +19,10 @@ const storeSchema = new mongoose.Schema(
       required: [true, "Store logo is required"],
       default: "/images/placeholder.png",
     },
+    logoPublicId: {
+      type: String,
+      default: "",
+    },
     description: {
       type: String,
       trim: true,
@@ -27,6 +31,14 @@ const storeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    categories: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    }],
+    subcategories: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subcategory",
+    }],
     isActive: {
       type: Boolean,
       default: true,

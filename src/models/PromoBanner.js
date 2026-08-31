@@ -20,6 +20,10 @@ const promoBannerSchema = new mongoose.Schema(
       trim: true,
       default: "/images/placeholder.png",
     },
+    imagePublicId: {
+      type: String,
+      default: "",
+    },
     status: {
       type: String,
       enum: ["enabled", "disabled"],

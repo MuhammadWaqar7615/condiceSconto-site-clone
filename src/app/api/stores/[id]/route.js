@@ -3,6 +3,7 @@ import Store from "@/models/Store";
 import connectMongo from "@/lib/mongodb";
 import { getSession } from "@/lib/auth/session";
 import { ROLES } from "@/lib/auth/roles";
+import cloudinary from "@/lib/cloudinary";
 
 async function checkAdminAuth() {
   const session = await getSession();
@@ -27,7 +28,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json({ store }, { status: 200 });
   } catch (error) {
-    console.error(`GET /api/stores/${params.id} Error:`, error);
+    console.error(`GET /api/stores/${params?.id} Error:`, error);
     if (error.name === "CastError") {
       return NextResponse.json({ message: "Invalid ID format" }, { status: 400 });
     }
@@ -52,6 +53,16 @@ export async function PUT(request, { params }) {
       }
     }
 
+    // Check if image changed and delete old image from Cloudinary
+    const currentStore = await Store.findById(id);
+    if (currentStore && currentStore.logoPublicId && data.logoPublicId && currentStore.logoPublicId !== data.logoPublicId) {
+      try {
+        await cloudinary.uploader.destroy(currentStore.logoPublicId);
+      } catch (err) {
+        console.error("Failed to delete old image from Cloudinary:", err);
+      }
+    }
+
     const updatedStore = await Store.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
@@ -63,7 +74,7 @@ export async function PUT(request, { params }) {
 
     return NextResponse.json({ store: updatedStore }, { status: 200 });
   } catch (error) {
-    console.error(`PUT /api/stores/${params.id} Error:`, error);
+    console.error(`PUT /api/stores/${params?.id} Error:`, error);
     if (error.name === "CastError") {
       return NextResponse.json({ message: "Invalid ID format" }, { status: 400 });
     }
@@ -79,15 +90,26 @@ export async function DELETE(request, { params }) {
     await connectMongo();
     const { id } = await params;
 
-    const deletedStore = await Store.findByIdAndDelete(id);
-
-    if (!deletedStore) {
+    const storeToDelete = await Store.findById(id);
+    
+    if (!storeToDelete) {
       return NextResponse.json({ message: "Store not found" }, { status: 404 });
     }
 
+    // Delete image from Cloudinary if it exists
+    if (storeToDelete.logoPublicId) {
+      try {
+        await cloudinary.uploader.destroy(storeToDelete.logoPublicId);
+      } catch (err) {
+        console.error("Failed to delete image from Cloudinary:", err);
+      }
+    }
+
+    await Store.findByIdAndDelete(id);
+
     return NextResponse.json({ message: "Store deleted successfully" }, { status: 200 });
   } catch (error) {
-    console.error(`DELETE /api/stores/${params.id} Error:`, error);
+    console.error(`DELETE /api/stores/${params?.id} Error:`, error);
     if (error.name === "CastError") {
       return NextResponse.json({ message: "Invalid ID format" }, { status: 400 });
     }

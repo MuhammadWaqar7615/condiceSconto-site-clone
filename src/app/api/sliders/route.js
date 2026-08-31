@@ -35,7 +35,7 @@ export async function POST(request) {
     const body = await request.json();
     if (!body.title?.trim()) return NextResponse.json({ message: "Title is required." }, { status: 400 });
     await connectMongo();
-    const slider = await Slider.create({ title: body.title, description: body.description, discount: body.discount, logo: body.logo, link: body.link, featured: body.featured, seoTitle: body.seoTitle, seoDescription: body.seoDescription, status: body.status, image: body.image });
+    const slider = await Slider.create({ title: body.title, description: body.description, discount: body.discount, logo: body.logo, logoPublicId: body.logoPublicId, link: body.link, featured: body.featured, seoTitle: body.seoTitle, seoDescription: body.seoDescription, status: body.status, image: body.image, imagePublicId: body.imagePublicId });
     return NextResponse.json({ slider }, { status: 201 });
   } catch (error) {
     console.error("POST /api/sliders Error:", error);

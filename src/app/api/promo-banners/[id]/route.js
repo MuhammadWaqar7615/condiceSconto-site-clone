@@ -4,6 +4,7 @@ import PromoBanner from "@/models/PromoBanner";
 import connectMongo from "@/lib/mongodb";
 import { getSession } from "@/lib/auth/session";
 import { ROLES } from "@/lib/auth/roles";
+import cloudinary from "@/lib/cloudinary";
 
 async function requireAdmin() {
   const session = await getSession();
@@ -17,7 +18,7 @@ function validId(id) {
 }
 
 function editableFields(body) {
-  return { heading: body.heading, description: body.description, image: body.image, status: body.status };
+  return { heading: body.heading, description: body.description, image: body.image, imagePublicId: body.imagePublicId, status: body.status };
 }
 
 export async function GET(request, { params }) {
@@ -45,6 +46,16 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ message: "Heading, description, and image are required." }, { status: 400 });
     }
     await connectMongo();
+
+    const currentBanner = await PromoBanner.findById(id);
+    if (currentBanner && currentBanner.imagePublicId && body.imagePublicId && currentBanner.imagePublicId !== body.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(currentBanner.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete old promo banner image from Cloudinary:", err);
+      }
+    }
+
     const promoBanner = await PromoBanner.findByIdAndUpdate(id, editableFields(body), { new: true, runValidators: true }).lean();
     if (!promoBanner) return NextResponse.json({ message: "Promo banner not found" }, { status: 404 });
     return NextResponse.json({ promoBanner });
@@ -62,8 +73,19 @@ export async function DELETE(request, { params }) {
     const { id } = await params;
     if (!validId(id)) return NextResponse.json({ message: "Invalid promo banner ID" }, { status: 400 });
     await connectMongo();
+
+    const bannerToDelete = await PromoBanner.findById(id);
+    if (!bannerToDelete) return NextResponse.json({ message: "Promo banner not found" }, { status: 404 });
+
+    if (bannerToDelete.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(bannerToDelete.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete promo banner image from Cloudinary:", err);
+      }
+    }
+
     const promoBanner = await PromoBanner.findByIdAndDelete(id);
-    if (!promoBanner) return NextResponse.json({ message: "Promo banner not found" }, { status: 404 });
     return NextResponse.json({ message: "Promo banner deleted successfully" });
   } catch (error) {
     console.error("DELETE /api/promo-banners/[id] Error:", error);

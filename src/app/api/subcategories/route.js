@@ -59,6 +59,7 @@ export async function POST(request) {
 
     const subcategory = await Subcategory.create({
       title: body.title,
+      slug: body.slug,
       description: body.description,
       parentCategory: body.parentCategory,
       seoTitle: body.seoTitle,

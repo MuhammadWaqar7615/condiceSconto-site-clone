@@ -1,112 +1,47 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import ImageOfferCard from './ImageOfferCard';
 
-const mockOffers = [
-  {
-    store: "SAMSUNG",
-    discount: "OMAGGIO",
-    title: "Promo Samsung Galaxy S26+ | Ultra per te Tab S10 FE in omaggio",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/samsung-prof.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/samsung.png"
-  },
-  {
-    store: "MOVA",
-    discount: "550€",
-    labelTop: "FINO A",
-    title: "Sconto MOVA 550€",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/mova3.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/mova.png"
-  },
-  {
-    store: "Redcare",
-    discount: "12%",
-    title: "Codice sconto Lampade.it 12€",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/lampade7.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/lampade.png"
-  },
-  {
-    store: "radissonhotels",
-    labelTop: "FINO AL",
-    discount: "10%",
-    title: "Codice sconto Radisson Hotels 25% + 10% membri",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/radissonhotels.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/radissonhotels.png"
-  },
-  {
-    store: "lastminute.com",
-    discount: "50€",
-    labelTop: "VOLO+HOTEL",
-    title: "Codice sconto lastminute.com 50€ volo+hotel",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/lastminute.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/lastminute.png"
-  },
-  {
-    store: "aquazoomania",
-    discount: "5%",
-    title: "Coupon aquaZooMania 5%",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/aquazoomania4.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/aquazoomania.png"
-  },
-  {
-    store: "AirHelp",
-    discount: "8%",
-    title: "Codice sconto AirHelp 8% Smart",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/airhelp.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/airhelp.png"
-  },
-  {
-    store: "bellaoggi",
-    discount: "20%",
-    title: "Codice sconto BELLAOGGI 20%",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/bellaoggi.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/bellaoggi.png"
-  },
-  {
-    store: "shark ninja",
-    discount: "10%",
-    title: "Coupon SharkNinja 10%",
-    dealUrl: "#",
-    // TODO: Replace placeholder with original image
-    image: "/images/sharkninja.jpg",
-    // TODO: Replace placeholder with original image
-    logo: "/images/sharkninja.png"
-  },
-];
-
 function SecondaryOffers() {
+  const [deals, setDeals] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/features")
+      .then((res) => res.json())
+      .then((data) => {
+        const fetchedDeals = (data.features || [])
+          .filter(feature => feature.homepageSection === "secondary")
+          .map((feature) => ({
+            store: feature.storeId?.name || "Store",
+            discount: feature.discount || "",
+            labelTop: feature.labelTop || "",
+            labelBottom: feature.labelBottom || "",
+            title: feature.title || "",
+            dealUrl: feature.storeId?.slug ? `/store/${feature.storeId.slug}` : "#",
+            logo: feature.storeId?.logoPath || "/images/placeholder.png",
+            image: feature.image || "/images/placeholder.png",
+          }));
+        setDeals(fetchedDeals);
+      })
+      .catch((err) => console.error("Failed to fetch features", err));
+  }, []);
+
   return (
     <section className="py-12">
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 bg-primary-dark rounded-2xl py-8">
 
         {/* 3x3 Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          {mockOffers.map((deal, index) => (
-            <ImageOfferCard key={index} deal={deal} />
-          ))}
+          {deals.length > 0 ? (
+            deals.map((deal, index) => (
+              <ImageOfferCard key={index} deal={deal} />
+            ))
+          ) : (
+            <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center text-white py-10">
+              Nessuna offerta secondaria disponibile.
+            </div>
+          )}
         </div>
 
       </div>

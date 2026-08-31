@@ -4,6 +4,7 @@ import BlogPost from "@/models/BlogPost";
 import connectMongo from "@/lib/mongodb";
 import { getSession } from "@/lib/auth/session";
 import { ROLES } from "@/lib/auth/roles";
+import cloudinary from "@/lib/cloudinary";
 
 async function requireAdmin() {
   const session = await getSession();
@@ -39,7 +40,17 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     if (!body.title?.trim() || !body.description?.trim() || !body.image?.trim()) return NextResponse.json({ message: "Title, description, and image are required." }, { status: 400 });
     await connectMongo();
-    const post = await BlogPost.findByIdAndUpdate(id, { title: body.title, description: body.description, image: body.image, status: body.status }, { new: true, runValidators: true }).lean();
+
+    const currentPost = await BlogPost.findById(id);
+    if (currentPost && currentPost.imagePublicId && body.imagePublicId && currentPost.imagePublicId !== body.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(currentPost.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete old blog post image from Cloudinary:", err);
+      }
+    }
+
+    const post = await BlogPost.findByIdAndUpdate(id, { title: body.title, description: body.description, image: body.image, imagePublicId: body.imagePublicId, status: body.status }, { new: true, runValidators: true }).lean();
     if (!post) return NextResponse.json({ message: "Blog post not found" }, { status: 404 });
     return NextResponse.json({ post });
   } catch (error) {
@@ -56,8 +67,19 @@ export async function DELETE(request, { params }) {
     const { id } = await params;
     if (!validId(id)) return NextResponse.json({ message: "Invalid blog post ID" }, { status: 400 });
     await connectMongo();
+
+    const postToDelete = await BlogPost.findById(id);
+    if (!postToDelete) return NextResponse.json({ message: "Blog post not found" }, { status: 404 });
+
+    if (postToDelete.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(postToDelete.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete blog post image from Cloudinary:", err);
+      }
+    }
+
     const post = await BlogPost.findByIdAndDelete(id);
-    if (!post) return NextResponse.json({ message: "Blog post not found" }, { status: 404 });
     return NextResponse.json({ message: "Blog post deleted successfully" });
   } catch (error) {
     console.error("DELETE /api/blog/[id] Error:", error);

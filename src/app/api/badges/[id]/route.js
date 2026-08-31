@@ -4,6 +4,7 @@ import Badge from "@/models/Badge";
 import connectMongo from "@/lib/mongodb";
 import { getSession } from "@/lib/auth/session";
 import { ROLES } from "@/lib/auth/roles";
+import cloudinary from "@/lib/cloudinary";
 
 async function requireAdmin() {
   const session = await getSession();
@@ -39,7 +40,17 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     if (!body.name?.trim() || !body.image?.trim()) return NextResponse.json({ message: "Name and image are required." }, { status: 400 });
     await connectMongo();
-    const badge = await Badge.findByIdAndUpdate(id, { name: body.name, image: body.image }, { new: true, runValidators: true }).lean();
+
+    const currentBadge = await Badge.findById(id);
+    if (currentBadge && currentBadge.imagePublicId && body.imagePublicId && currentBadge.imagePublicId !== body.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(currentBadge.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete old badge image from Cloudinary:", err);
+      }
+    }
+
+    const badge = await Badge.findByIdAndUpdate(id, { name: body.name, image: body.image, imagePublicId: body.imagePublicId }, { new: true, runValidators: true }).lean();
     if (!badge) return NextResponse.json({ message: "Badge not found" }, { status: 404 });
     return NextResponse.json({ badge });
   } catch (error) {
@@ -56,8 +67,19 @@ export async function DELETE(request, { params }) {
     const { id } = await params;
     if (!validId(id)) return NextResponse.json({ message: "Invalid badge ID" }, { status: 400 });
     await connectMongo();
+
+    const badgeToDelete = await Badge.findById(id);
+    if (!badgeToDelete) return NextResponse.json({ message: "Badge not found" }, { status: 404 });
+
+    if (badgeToDelete.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(badgeToDelete.imagePublicId);
+      } catch (err) {
+        console.error("Failed to delete badge image from Cloudinary:", err);
+      }
+    }
+
     const badge = await Badge.findByIdAndDelete(id);
-    if (!badge) return NextResponse.json({ message: "Badge not found" }, { status: 404 });
     return NextResponse.json({ message: "Badge deleted successfully" });
   } catch (error) {
     console.error("DELETE /api/badges/[id] Error:", error);

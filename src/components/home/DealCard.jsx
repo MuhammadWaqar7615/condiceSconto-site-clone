@@ -1,20 +1,24 @@
 import React from 'react';
+import Link from 'next/link';
 
 function DealCard({ deal }) {
   const isTextOffer = deal.discount === "OFFERTA";
   
   return (
-    <div className="bg-white flex flex-col items-center h-[240px] hover:shadow-md transition-shadow cursor-pointer relative px-5 sm:px-6">
+    <Link 
+      href={deal.dealUrl || "#"}
+      className="bg-white flex flex-col items-center h-[240px] hover:shadow-md transition-shadow cursor-pointer relative px-5 sm:px-6 group"
+    >
       
       {/* Top Logo */}
       <div className="w-full flex-1 flex justify-center items-start pt-6 sm:pt-8">
-        <a href={deal.dealUrl} className="flex items-center justify-center w-full h-12 sm:h-14">
+        <div className="flex items-center justify-center w-full h-12 sm:h-14">
           <img
             src={deal.logo || "/images/placeholder.png"}
-            alt={deal.store}
+            alt={deal.store || "Store logo"}
             className="max-h-full max-w-[150px] sm:max-w-[180px] object-contain"
           />
-        </a>
+        </div>
       </div>
       
       {/* Middle Discount with Dotted Lines */}
@@ -40,15 +44,14 @@ function DealCard({ deal }) {
       
       {/* Description */}
       <div className="w-full flex-1 flex justify-center items-end pb-6 sm:pb-8 text-center px-1">
-        <a
-          href={deal.dealUrl}
-          className="text-gray-500 text-[11px] sm:text-[12px] hover:text-accent transition-colors leading-relaxed"
+        <span
+          className="text-gray-500 text-[11px] sm:text-[12px] group-hover:text-accent transition-colors leading-relaxed"
         >
           {deal.title}
-        </a>
+        </span>
       </div>
       
-    </div>
+    </Link>
   );
 }
 

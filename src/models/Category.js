@@ -8,6 +8,13 @@ const categorySchema = new mongoose.Schema(
       trim: true,
       maxlength: 120,
     },
+    slug: {
+      type: String,
+      required: [true, "Category slug is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
     description: {
       type: String,
       trim: true,
@@ -45,6 +52,10 @@ const categorySchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "/images/placeholder.png",
+    },
+    imagePublicId: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

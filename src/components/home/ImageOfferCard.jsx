@@ -1,20 +1,19 @@
 import React from 'react';
+import Link from 'next/link';
 
 function ImageOfferCard({ deal }) {
   const isTextOffer = deal.discount === "OMAGGIO";
   
   return (
-    <div className="bg-white flex flex-col items-center h-full hover:shadow-md transition-shadow cursor-pointer relative pb-6 sm:pb-8">
+    <Link href={deal.dealUrl || "#"} className="bg-white flex flex-col items-center h-full hover:shadow-md transition-shadow cursor-pointer relative pb-6 sm:pb-8 block">
       
       {/* Top Full-width Image */}
       <div className="w-full h-[150px] sm:h-[170px] overflow-hidden">
-        <a href={deal.dealUrl} className="block w-full h-full">
-          <img
-            src={deal.image || "/images/placeholder.png"}
-            alt={deal.store}
-            className="w-full h-full object-cover"
-          />
-        </a>
+        <img
+          src={deal.image || "/images/placeholder.png"}
+          alt={deal.store}
+          className="w-full h-full object-cover"
+        />
       </div>
       
       {/* Logo */}
@@ -49,15 +48,12 @@ function ImageOfferCard({ deal }) {
       
       {/* Description */}
       <div className="w-full text-center px-4 mt-6 flex-1 flex items-start justify-center">
-        <a
-          href={deal.dealUrl}
-          className="text-gray-500 text-[11px] sm:text-[12px] hover:text-accent transition-colors leading-relaxed"
-        >
+        <span className="text-gray-500 text-[11px] sm:text-[12px] hover:text-accent transition-colors leading-relaxed">
           {deal.title}
-        </a>
+        </span>
       </div>
       
-    </div>
+    </Link>
   );
 }
 

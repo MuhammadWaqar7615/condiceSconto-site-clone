@@ -1,32 +1,42 @@
-import React from 'react';
+"use client";
 
-const newCodes = [
-  { tag: "CODICE", title: "Codice sconto PhotoSì dal 20% al 40%", logo: "/images/photosi.png" },
-  { tag: "SPEDIZIONE", title: "Spedizione gratuita OVS", logo: "/images/ovs.png" },
-  { tag: "CODICE EXTRA", title: "Codice sconto OVS 20% compleanno", logo: "/images/ovs.png" },
-  { tag: "CODICE EXTRA", title: "Codice sconto OVS 10%", logo: "/images/ovs.png" },
-  { tag: "SPEDIZIONE", title: "Spedizione gratuita FarmaNika", logo: "/images/farmanika.png" },
-  { tag: "CODICE", title: "Codice sconto FarmaNika 5%", logo: "/images/farmanika.png" },
-  { tag: "CODICE", title: "Codice sconto eDreams 65€ Porto Rico", logo: "/images/edreams.png" },
-  { tag: "CODICE", title: "Codice sconto eDreams 60€ Repubblica Dominicana", logo: "/images/edreams.png" },
-  { tag: "CODICE", title: "Codice sconto eDreams 40€ Madeira", logo: "/images/edreams.png" },
-  { tag: "CODICE", title: "Codice sconto eDreams 10€ Marocco", logo: "/images/edreams.png" },
-];
-
-const expiringCodes = [
-  { tag: "CODICE", title: "Codice sconto MyParking 10%", logo: "/images/myparking.png" },
-  { tag: "SCONTO", title: "Sconto Decathlon 80% offerte", logo: "/images/decathlon.png" },
-  { tag: "CODICE EXTRA", title: "Codice sconto Redcare 10%", logo: "/images/redcare.png" },
-  { tag: "CODICE", title: "Codice sconto Havaianas 10%", logo: "/images/havaianas.png" },
-  { tag: "CODICE", title: "Buono sconto Lyca Mobile 10€ porta un amico", logo: "/images/lycamobile.png" },
-  { tag: "SCONTO", title: "Sconto Tutete 50%", logo: "/images/tutete.png" },
-  { tag: "CODICE EXTRA", title: "Codice sconto BENU Farma 10%", logo: "/images/benufarma.png" },
-  { tag: "CODICE", title: "Coupon illy 15%", logo: "/images/illy.png" },
-  { tag: "CODICE EXTRA", title: "Codice sconto Redcare 5€", logo: "/images/redcare.png" },
-  { tag: "CODICE EXTRA", title: "Codice sconto TWINSET Milano 15%", logo: "/images/twinset.png" },
-];
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 function CodeLists() {
+  const [newCodes, setNewCodes] = useState([]);
+  const [expiringCodes, setExpiringCodes] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/features")
+      .then((res) => res.json())
+      .then((data) => {
+        const features = data.features || [];
+        
+        const fetchedNewCodes = features
+          .filter(feature => feature.homepageSection === "new")
+          .map(feature => ({
+            tag: "",
+            title: feature.title || "",
+            logo: feature.storeId?.logoPath || "/images/placeholder.png",
+            dealUrl: feature.storeId?.slug ? `/store/${feature.storeId.slug}` : "#"
+          }));
+
+        const fetchedExpiringCodes = features
+          .filter(feature => feature.homepageSection === "expiring")
+          .map(feature => ({
+            tag: "",
+            title: feature.title || "",
+            logo: feature.storeId?.logoPath || "/images/placeholder.png",
+            dealUrl: feature.storeId?.slug ? `/store/${feature.storeId.slug}` : "#"
+          }));
+
+        setNewCodes(fetchedNewCodes);
+        setExpiringCodes(fetchedExpiringCodes);
+      })
+      .catch((err) => console.error("Failed to fetch features for CodeLists", err));
+  }, []);
+
   return (
     <section className="py-12">
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 bg-primary-dark rounded-2xl py-8">
@@ -51,21 +61,25 @@ function CodeLists() {
 
             {/* Left Column: Nuovi */}
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              {newCodes.map((item, index) => (
-                <a key={index} href="#" className="bg-white flex items-center h-[76px] sm:h-[80px] hover:shadow-md transition-shadow group rounded-sm overflow-hidden">
-                  <div className="w-[110px] sm:w-[130px] h-full flex-shrink-0 flex items-center justify-center p-3">
-                    {/* TODO: Replace placeholder with original image if needed */}
-                    <img src={item.logo} alt="Store Logo" className="max-h-[35px] max-w-[85px] object-contain" />
-                  </div>
+              {newCodes.length > 0 ? (
+                newCodes.map((item, index) => (
+                  <Link key={index} href={item.dealUrl} className="bg-white flex items-center h-[76px] sm:h-[80px] hover:shadow-md transition-shadow group rounded-sm overflow-hidden">
+                    <div className="w-[110px] sm:w-[130px] h-full flex-shrink-0 flex items-center justify-center p-3">
+                      {/* TODO: Replace placeholder with original image if needed */}
+                      <img src={item.logo} alt="Store Logo" className="max-h-[35px] max-w-[85px] object-contain" />
+                    </div>
 
-                  <div className="h-[55%] border-l border-dashed border-accent opacity-40"></div>
+                    <div className="h-[55%] border-l border-dashed border-accent opacity-40"></div>
 
-                  <div className="flex-1 pl-4 pr-3 py-2 flex flex-col justify-center">
-                    <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-0.5">{item.tag}</div>
-                    <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-accent transition-colors leading-tight line-clamp-2">{item.title}</div>
-                  </div>
-                </a>
-              ))}
+                    <div className="flex-1 pl-4 pr-3 py-2 flex flex-col justify-center">
+                      {item.tag && <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-0.5">{item.tag}</div>}
+                      <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-accent transition-colors leading-tight line-clamp-2">{item.title}</div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <div className="text-center py-4 text-gray-500">Nessun codice novità.</div>
+              )}
             </div>
 
             {/* Mobile Title for Right Column */}
@@ -77,21 +91,25 @@ function CodeLists() {
 
             {/* Right Column: In Scadenza */}
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              {expiringCodes.map((item, index) => (
-                <a key={index} href="#" className="bg-white flex items-center h-[76px] sm:h-[80px] hover:shadow-md transition-shadow group rounded-sm overflow-hidden">
-                  <div className="w-[110px] sm:w-[130px] h-full flex-shrink-0 flex items-center justify-center p-3">
-                    {/* TODO: Replace placeholder with original image if needed */}
-                    <img src={item.logo} alt="Store Logo" className="max-h-[35px] max-w-[85px] object-contain" />
-                  </div>
+              {expiringCodes.length > 0 ? (
+                expiringCodes.map((item, index) => (
+                  <Link key={index} href={item.dealUrl} className="bg-white flex items-center h-[76px] sm:h-[80px] hover:shadow-md transition-shadow group rounded-sm overflow-hidden">
+                    <div className="w-[110px] sm:w-[130px] h-full flex-shrink-0 flex items-center justify-center p-3">
+                      {/* TODO: Replace placeholder with original image if needed */}
+                      <img src={item.logo} alt="Store Logo" className="max-h-[35px] max-w-[85px] object-contain" />
+                    </div>
 
-                  <div className="h-[55%] border-l border-dashed border-accent opacity-40"></div>
+                    <div className="h-[55%] border-l border-dashed border-accent opacity-40"></div>
 
-                  <div className="flex-1 pl-4 pr-3 py-2 flex flex-col justify-center">
-                    <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-0.5">{item.tag}</div>
-                    <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-accent transition-colors leading-tight line-clamp-2">{item.title}</div>
-                  </div>
-                </a>
-              ))}
+                    <div className="flex-1 pl-4 pr-3 py-2 flex flex-col justify-center">
+                      {item.tag && <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-0.5">{item.tag}</div>}
+                      <div className="text-[12px] sm:text-[13px] text-gray-700 group-hover:text-accent transition-colors leading-tight line-clamp-2">{item.title}</div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <div className="text-center py-4 text-gray-500">Nessun codice in scadenza.</div>
+              )}
             </div>
 
           </div>
