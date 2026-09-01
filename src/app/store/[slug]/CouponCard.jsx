@@ -37,11 +37,11 @@ export default function CouponCard({ coupon }) {
             Top
           </span>
         )}
-        <span className="text-[12px] font-bold text-accent uppercase tracking-widest mb-1 mt-2 md:mt-0">
-          {coupon.type === 'code' ? 'CODICE' : 'OFFERTA'}
-        </span>
         <span className="text-[32px] font-extrabold text-gray-800 leading-none text-center tracking-tighter">
           {coupon.discount}
+        </span>
+        <span className="text-[12px] font-bold text-accent uppercase tracking-widest mb-1 mt-2 md:mt-0">
+          {coupon.type === 'code' ? 'CODICE' : 'OFFERTA'}
         </span>
       </div>
 
